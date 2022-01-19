@@ -13,7 +13,7 @@ import netCDF4 as nc
 
 #################################################
 
-
+# Load functions
 def LoadYelmo1D(exp_name, var_name, datapath, time=None):
     ''' Loads 1D var_name from datapath/exp_name/yelmo1D.nc '''
     # First, we read the file from exp_name experiment
@@ -60,14 +60,14 @@ def LoadYelmo3D(exp_name, var_name, datapath, time=None):
 
     return data, xc, yc
 
-
+# Load another kind of files
 def LoadCSVList(file, sourpath):
     ''' Loads general list of values in file.csv '''
     with open(sourpath + file, newline='') as f:
         file = pd.read_csv(f, delimiter=',', header=None)
     return file
 
-
+# Operations
 def SLE(data, rhoi=0.9167, rhosw=1.027, A_oc=3.618*10**8):
     ''' Transforms volume data to m SLE \n
         [data] = km**3 
@@ -124,7 +124,7 @@ def Hchange(data, resolution=32, basins=[], basins_nasa=[]):
 
         return Hchange, vals, bvals
 
-
+# Other stuff
 def years2plot(ini=0, fini=51, step=5):
     ''' Generates a list of index for time \n
         step=5 is recommended
