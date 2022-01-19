@@ -44,7 +44,7 @@ def LatexFormatter(string):
 
     return string
 
-
+# 1D variables
 def Plot1D(data, name, units, time_units, plotpath, shades=[],  labels=['ABUC', 'ABUK', 'ABUM'], color=['blue', 'red', 'orange'], linestyles=['solid', 'solid', 'solid'], linewidths=[2, 2, 2], file_name='plot1D.png', fontsize=20):
     ''' Plots the time series of one 1D variable \n
         data.shape = nexps, ntimes 
@@ -108,7 +108,7 @@ def comPlot1D(data1, data2, name1, units1, name2, units2, time_units, xticks, pl
     ax2.legend(fontsize=0.8*fontsize, bbox_to_anchor=(1, 0.8))
     plt.savefig(plotpath + file_name)
 
-
+# 2D variables
 def Map2D(data, x, y, bar_name, exp_names, levels, contours, contours_levels, cmap='cmo.ice_r', log_scale=False, fig_size=[], fontsize=20, SHOW=False, base=10, ltresh=0.1, lscale=1, subs=[10], plotpath=[], file_name='map2D.png', set_ax='On'):
     ''' Plot 2D data from Yelmo in n panels \n
         data.shape = (n, :, :) where n is the number of experiments
