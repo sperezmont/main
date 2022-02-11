@@ -11,7 +11,8 @@ git clone https://github.com/sperezmont/yelmo_tools.git
 ```
 Edit lines 2, 3 and 4 of `config/config.sh` with your needs and configure the system
 ```bash
-chmod +x config/config.sh
+cd config/
+chmod +x config.sh
 config/config.sh
 ```
 This will install the necessary Python dependencies that need the tools
