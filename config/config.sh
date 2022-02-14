@@ -7,6 +7,6 @@ echo 'Installing requirements ...'
 source ${conda_path}/anaconda3/etc/profile.d/conda.sh
 conda create -n ${env_name} python=${py_version}  
 conda activate ${env_name}
-pip install -r requirements.txt
+pip install -r yelmo-tools_req.txt
 conda deactivate 
 echo 'Ready'
