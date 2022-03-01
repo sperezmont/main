@@ -22,3 +22,10 @@ Now, edit the interpreter lines (first line) in `yelmo_functions.py`, `yelmo_plo
 ```python
 #!/path/anaconda3/envs/env_name/bin/python_version
 ```
+
+# Extra
+You may also need to install LaTeX
+```bash
+sudo apt-get install dvipng texlive-latex-extra texlive-fonts-recommended cm-super
+```
+This will install also the needed packages for render the plots
