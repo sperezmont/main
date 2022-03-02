@@ -1,4 +1,4 @@
-#!/home/sergio/anaconda3/envs/yelmo_tools/bin/python3
+#!/home/sergio/apps/anaconda3/envs/yelmo_tools/bin/python3
 """
 Author: Sergio Pérez Montero\n
 Date: 20.12.2021\n
@@ -175,4 +175,15 @@ def convert_dtt(darray, item, time_step, len2convert):
     d = intersperse(d, item, len2convert, time_step)
     d = np.array(d)
     d[d == item] = np.NaN
+    return d
+
+def convert_array_dtt(darray, time_step, len2convert, lenx, leny):
+    '''
+        Change a time series (array version) with time_step to length len2convert \n
+    '''
+    d = np.empty([len2convert, lenx, leny])
+    if len(darray[:,0,0]) % 2 == 0:
+        d[::time_step,:,:] = darray[:-1,:,:]
+    else:
+        d[::time_step,:,:] = darray[:,:,:]
     return d

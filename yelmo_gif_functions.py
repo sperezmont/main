@@ -1,4 +1,4 @@
-#!/home/sergio/anaconda3/envs/yelmo_tools/bin/python3
+#!/home/sergio/apps/anaconda3/envs/yelmo_tools/bin/python3
 """
 Author: Sergio Pérez Montero\n
 Date: 13.01.2022\n
@@ -52,8 +52,7 @@ def Map2DI(data, time, x, y, bar_name, exp_names, levels, contours, con_levels, 
 
     if log_scale:
         vmin, vmax = levels[0], levels[-1]
-        locator = mpl.ticker.SymmetricalLogLocator(
-            base=base, linthresh=ltresh, subs=subs)
+        locator = mpl.ticker.SymmetricalLogLocator(base=base, linthresh=ltresh, subs=subs)
         locator.tick_values(vmin=vmin, vmax=vmax)
         norm = mpl.colors.SymLogNorm(
             base=base, linthresh=ltresh, linscale=lscale, vmin=vmin, vmax=vmax)
