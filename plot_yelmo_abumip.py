@@ -34,7 +34,7 @@ fnt_size1D, fnt_size2D = 28, 35  # fontsize
 
 # GIFs
 FPS = 0.5
-times2plot = [0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,50]#[0, 1, 2, 3, 4, 5, 7, 9, 10, 13, 15, 18, 20, 25, 30, 35, 40, 45, 50]  # list(np.arange(0, 52, 2))
+times2plot = [0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48]#[0, 1, 2, 3, 4, 5, 7, 9, 10, 13, 15, 18, 20, 25, 30, 35, 40, 45, 50]  # list(np.arange(0, 52, 2))
 
 # YELMO simulation
 res, lenx, leny, lent, lent2D = 32, 191, 191, 501, 51 # lent has to be the largest length of time in yelmo1D
@@ -44,12 +44,12 @@ basin_names = ['1, Filchner-Ronne RSB', '2, Riiser-Larsen, Stancomb, Brunt', '3,
                '10, Rennick (WSB)', '11, Drygalski (WSB)', '12, Ross', '13, Getz', '14, Pine Island, Thwaites (AMS)', '15, Abbot', '16, Wilkins, Stange, Bach, George VI', '17', '18, Larsen C', '19']
 
 # Switches
-sVAF = 1
-sHCHANGE = 1
-sZSRF = 1
-sUXY = 1
-sGIFS, szgif, shgif, sugif = 0, 0, 0, 0
-sGIFS3D, zgif3D, hgif3D = 1, 1, 1   # only one at a time
+sVAF = 0
+sHCHANGE = 0
+sZSRF = 0
+sUXY = 0
+sGIFS, szgif, shgif, sugif = 1, 0, 0, 1
+sGIFS3D, zgif3D, hgif3D = 0, 0, 0   # only one at a time
 
 # SCRIPT
 # -- Directories
