@@ -1,4 +1,4 @@
-#!/home/sergio/anaconda3/envs/yelmo_tools/bin/python3
+#!/home/sergio/apps/anaconda3/envs/yelmo_tools/bin/python3
 """
 Author: Sergio Pérez Montero\n
 Date: 20.12.2021\n
@@ -154,3 +154,25 @@ def years2plot(ini=0, fini=51, step=5):
                 years_toplot[y] = years_toplot[y] - 1
 
     return years_toplot
+
+def intersperse(lst, item, lenlst, factor):
+    '''
+        Adds item between the elements of lst \n
+        Adapted from https://stackoverflow.com/questions/5920643/add-an-item-between-each-item-already-in-the-list 
+    '''
+    result = [item] * lenlst
+    if len(lst) % 2 == 0:
+        result[::factor] = lst[:-1]
+    else:
+        result[::factor] = lst
+    return result
+
+def convert_dtt(darray, item, time_step, len2convert):
+    '''
+        Change a time series with time_step to length len2convert \n
+    '''
+    d = darray.tolist()
+    d = intersperse(d, item, len2convert, time_step)
+    d = np.array(d)
+    d[d == item] = np.NaN
+    return d

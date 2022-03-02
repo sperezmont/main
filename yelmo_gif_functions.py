@@ -1,4 +1,4 @@
-#!/home/sergio/anaconda3/envs/yelmo_tools/bin/python3
+#!/home/sergio/apps/anaconda3/envs/yelmo_tools/bin/python3
 """
 Author: Sergio Pérez Montero\n
 Date: 13.01.2022\n
@@ -64,7 +64,7 @@ def Map2DI(data, time, x, y, bar_name, exp_names, levels, contours, con_levels, 
         nrows, ncols = fig_size
 
     fig = plt.figure(figsize=(7*ncols, 8*nrows))
-    fig.suptitle(r'Time = ' + str((time)*10) + ' yrs', fontsize=2*fontsize)
+    fig.suptitle(r'Time = ' + str((time)*10) + ' yrs', fontsize=fontsize)
     if vis == '3D':
         X, Y = np.meshgrid(x, y)
 
@@ -73,17 +73,17 @@ def Map2DI(data, time, x, y, bar_name, exp_names, levels, contours, con_levels, 
             ax = fig.add_subplot(nrows, ncols, i+1, projection='3d')
             ax.view_init(45, 240)
             ax.set_zlim([np.nanmin(levels), 1.5*np.nanmax(levels)])
+            ax.set(xlim=[-1800, 1800], ylim=[-1800, 1800])
         else:
             ax = fig.add_subplot(nrows, ncols, i+1)
         title = LatexFormatter(exp_names[i])
         ax.set_title(r''+title, fontsize=fontsize)
         ax.grid(linestyle='--')
-        ax.set(xlim=[-1800, 1800], ylim=[-1800, 1800])
         ax.axis(set_ax)
 
         if vis == '3D':
             if log_scale:
-                raise StopIteration 'Not implemented yet'
+                print('Not implemented yet')
                 # im = ax.plot_surface(
                 #    X, Y, data[i, :, :], cmap=cmap, locator=locator, norm=norm)
             else:

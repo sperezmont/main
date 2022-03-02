@@ -1,4 +1,4 @@
-#!/home/sergio/anaconda3/envs/yelmo_tools/bin/python3
+#!/home/sergio/apps/anaconda3/envs/yelmo_tools/bin/python3
 """
 Author: Sergio Pérez Montero\n
 Date: 22.12.2021\n
@@ -48,7 +48,7 @@ def LatexFormatter(string):
 # 1D variables
 
 
-def Plot1D(data, name, units, time_units, plotpath, shades=[],  labels=['ABUC', 'ABUK', 'ABUM'], color=['blue', 'red', 'orange'], linestyles=['solid', 'solid', 'solid'], linewidths=[2, 2, 2], file_name='plot1D.png', fontsize=20):
+def Plot1D(data, name, units, time_units, plotpath, shades=[],  labels=['ABUC', 'ABUK', 'ABUM'], color=['blue', 'red', 'orange'], linestyles=['solid', 'solid', 'solid'], markers=[None, None, None], linewidths=[2, 2, 2], file_name='plot1D.png', fontsize=20):
     ''' Plots the time series of one 1D variable \n
         data.shape = nexps, ntimes 
     '''
@@ -77,7 +77,7 @@ def Plot1D(data, name, units, time_units, plotpath, shades=[],  labels=['ABUC', 
     plt.savefig(plotpath + file_name)
 
 
-def comPlot1D(data1, data2, name1, units1, name2, units2, time_units, xticks, plotpath, shades=[], text=False, labels=['ABUC', 'ABUK', 'ABUM'], color=['blue', 'red', 'orange'], linestyles=['solid', 'solid', 'solid'], linewidths=[2, 2, 2], file_name='cplot1D.png', fontsize=20):
+def comPlot1D(data1, data2, name1, units1, name2, units2, time_units, xticks, plotpath, shades=[], text=False, labels=['ABUC', 'ABUK', 'ABUM'], color=['blue', 'red', 'orange'], linestyles=['solid', 'solid', 'solid'], markers=[None, None, None], linewidths=[2, 2, 2], file_name='cplot1D.png', fontsize=20):
     ''' Plots the time series of two 1D variables \n
         data1.shape = nexps, ntimes 
     '''
@@ -96,7 +96,7 @@ def comPlot1D(data1, data2, name1, units1, name2, units2, time_units, xticks, pl
         for j in range(nexps):
             label = LatexFormatter(labels[j])
             ax[i].plot(data[i][j, :], color=color[j],
-                       linestyle=linestyles[j], linewidth=linewidths[j], label=r''+label)
+                       linestyle=linestyles[j], marker=markers[j], markersize=linewidths[j], linewidth=linewidths[j], label=r''+label)
             if text == True:
                 ax[i].text(450, 0.98*data[i][j, -1], r''+str(round(data[i][j, -1], 1)) + ' ' +
                            units[i], color=color[j], fontsize=fontsize, horizontalalignment='center')
