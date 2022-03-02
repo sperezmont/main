@@ -1,4 +1,4 @@
-#!/home/sergio/apps/anaconda3/envs/yelmo_tools/bin/python3
+#!/home/sergio/anaconda3/envs/yelmo_tools/bin/python3
 """
 Author: Sergio Pérez Montero\n
 Date: 22.12.2021\n
