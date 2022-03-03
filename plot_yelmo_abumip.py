@@ -1,5 +1,6 @@
 #!/home/sergio/apps/anaconda3/envs/yelmo_tools/bin/python3
 #  Libraries
+from matplotlib import units
 import yelmo_functions as yf
 import yelmo_plot_functions as ypf
 import yelmo_gif_functions as ygf
@@ -17,7 +18,7 @@ locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/abumip_yelmo
 locsources = '/home/sergio/entra/ice_data/sources/ABUMIP_shades/'
 locbasins = '/home/sergio/entra/ice_data/Antarctica/ANT-32KM/ANT-32KM_BASINS-nasa.nc'
 
-experiments = ['abuc', 'abuk','abuk-marine_dtt3.0', 'abuk-marine_dtt5.0', 'abum']
+experiments = ['abuc','abuk','abum']#['dtt3.0']  #
 control_run = None  # 'abuc_01'  # set to None if needed
 out_fldr = '/abumip_01_32KM/'
 plot_name, gif_name, gif3_name = 'yelmo_abumip_01-32KM.png', 'yelmo_abumip_01-32KM.gif', 'yelmo_abumip_01-32KM_3D.gif'
@@ -25,31 +26,34 @@ set_ax = 'Off'  # Do you want to draw axis?
 
 # PLOTTING
 shades1D = [1, 1, 1]    # abuc, abuk, abum | from Sun et al., 2020
-color = ['blue', 'red', 'brown', 'peru', 'orange'] #['black', 'blue', 'red', 'green', 'darkgrey', 'lightblue', 'orange', 'lime']
-linestyles = ['solid', 'solid', 'solid', 'solid', 'solid'] #'solid', 'solid', 'solid', 'solid', 'solid']
-markers = [None, None, 'o', 'o', None]
-linewidths = [4, 4, 4, 4, 4]#, 8, 4, 4, 4, 4]
-fig_size = [1, 5]  # nrows, ncols
-fnt_size1D, fnt_size2D = 28, 35  # fontsize
+color = ['blue', 'red', 'orange'] #['black', 'blue', 'red', 'green', 'darkgrey', 'lightblue', 'orange', 'lime']
+linestyles = 3*['solid'] #'solid', 'solid', 'solid', 'solid', 'solid']
+markers = 3*[None]
+linewidths = 3*[4]#, 8, 4, 4, 4, 4]
+fig_size = [1, 3]  # nrows, ncols
+fnt_size1D, fnt_size2D = 20, 22#28, 35  # fontsize
+
+xticks1D = np.arange(0,501,501/6) # 0, 501, 506/6 
+xtickslab1D = [0, 100, 200, 300, 400, 500]
+units1D = 'yr' # '10 yr'
 
 # GIFs
-FPS = 0.5
-times2plot = [0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48]#[0, 1, 2, 3, 4, 5, 7, 9, 10, 13, 15, 18, 20, 25, 30, 35, 40, 45, 50]  # list(np.arange(0, 52, 2))
+FPS = 1.5
+times2plot = range(0,51,1) #range(0,17,1)#[0, 1, 2, 3, 4, 5, 7, 9, 10, 13, 15, 18, 20, 25, 30, 35, 40, 45, 50]  # list(np.arange(0, 52, 2))
 
 # YELMO simulation
-res, lenx, leny, lent, lent2D = 32, 191, 191, 501, 51 # lent has to be the largest length of time in yelmo1D
-dtt = [1, 1, 3, 5, 1]
+res, lenx, leny, lent, lent2D = 32, 191, 191, 501, 51# 168, 17#101, 51
 region_names = ['WAIS', 'EAIS', 'PAIS']
 basin_names = ['1, Filchner-Ronne RSB', '2, Riiser-Larsen, Stancomb, Brunt', '3, Fimbul', '4, Baudouin', '5, Shirase, Holmes', '6, Amery', '7, Shackleton, West', '8, Totten (ASB)', '9, Cook, Ninnis, Mertz (WSB)',
                '10, Rennick (WSB)', '11, Drygalski (WSB)', '12, Ross', '13, Getz', '14, Pine Island, Thwaites (AMS)', '15, Abbot', '16, Wilkins, Stange, Bach, George VI', '17', '18, Larsen C', '19']
 
 # Switches
-sVAF = 0
-sHCHANGE = 0
-sZSRF = 0
-sUXY = 0
-sGIFS, szgif, shgif, sugif = 1, 0, 0, 1
-sGIFS3D, zgif3D, hgif3D = 0, 0, 0   # only one at a time
+sVAF = 1
+sHCHANGE = 1
+sZSRF = 1
+sUXY = 1
+sGIFS, szgif, shgif, sugif = 1, 1, 1, 1
+sGIFS3D, zgif3D, hgif3D = 1, 1, 1   # only one at a time
 
 # SCRIPT
 # -- Directories
@@ -119,10 +123,6 @@ if sGIFS3D == 1:
 for i in range(n):
     if sVAF == 1:
         datan = yf.LoadYelmo1D(experiments[i], 'V_sl', locdata)
-        
-        if dtt[i] > 1:
-            datan = yf.convert_dtt(datan, -9999, dtt[i], lent)
-            
         if control_run != None:
             ref = yf.LoadYelmo1D(control_run, 'V_sl', locdata)
             drift = yf.Drift(ref)
@@ -193,25 +193,13 @@ for i in range(n):
 
 
     if sGIFS == 1:
-        if dtt[i] == 3:
-            maskbedgif, xc, yc = yf.LoadYelmo3D(
-                experiments[i], 'mask_bed', locdata)
-            maskbedgif = yf.convert_array_dtt(maskbedgif, dtt[i], lent2D, lenx, leny)[times2plot, :, :]
-            zmask_bed_gif[i, :, :, :] = maskbedgif
-        else:
-            maskbedgif, xc, yc = yf.LoadYelmo3D(
+        maskbedgif, xc, yc = yf.LoadYelmo3D(
                 experiments[i], 'mask_bed', locdata, time=times2plot)
-            zmask_bed_gif[i, :, :, :] = maskbedgif
+        zmask_bed_gif[i, :, :, :] = maskbedgif
 
         if szgif == 1:
-            if dtt[i] == 3:
-                z_gif, xc, yc = yf.LoadYelmo3D(
-                    experiments[i], 'z_srf', locdata)
-                z_gif = yf.convert_array_dtt(z_gif, dtt[i], lent2D, lenx, leny)
-                z_gif = z_gif[times2plot, :, :]
-            else:
-                z_gif, xc, yc = yf.LoadYelmo3D(
-                    experiments[i], 'z_srf', locdata, time=times2plot)
+            z_gif, xc, yc = yf.LoadYelmo3D(
+                experiments[i], 'z_srf', locdata, time=times2plot)
 
             if control_run != None:
                 ref = yf.LoadYelmo3D(control_run, 'z_srf',
@@ -222,12 +210,7 @@ for i in range(n):
             z_gif = ma.masked_where(maskbedgif == 0, z_gif)
             z_srf_gif[i, :, :, :] = z_gif/1000
         if shgif == 1:
-            if dtt[i] == 3:
-                Hgif, xc, yc = yf.LoadYelmo3D(experiments[i], 'H_grnd',  locdata)
-                Hgif = yf.convert_array_dtt(Hgif, dtt[i], lent2D, lenx, leny)
-                Hgif = Hgif[times2plot, :, :]
-            else:
-                Hgif, xc, yc = yf.LoadYelmo3D(experiments[i], 'H_grnd',  locdata, time=times2plot)
+            Hgif, xc, yc = yf.LoadYelmo3D(experiments[i], 'H_grnd',  locdata, time=times2plot)
 
             if control_run != None:
                 ref = yf.LoadYelmo3D(control_run, 'H_grnd', locdata, time=-1)
@@ -237,12 +220,7 @@ for i in range(n):
             Hgif = ma.masked_where(maskbedgif == 0, Hgif)
             H_grnd_gif[i, :, :, :] = Hgif
         if sugif == 1:
-            if dtt[i] == 3:
-                u_gif, xc, yc = yf.LoadYelmo3D(experiments[i], 'uxy_s', locdata)
-                u_gif = yf.convert_array_dtt(u_gif, dtt[i], lent2D, lenx, leny)
-                u_gif = u_gif[times2plot, :, :]
-            else:
-                u_gif, xc, yc = yf.LoadYelmo3D(experiments[i], 'uxy_s', locdata, time=times2plot)
+            u_gif, xc, yc = yf.LoadYelmo3D(experiments[i], 'uxy_s', locdata, time=times2plot)
 
             if control_run != None:
                 ref = yf.LoadYelmo3D(control_run, 'uxy_s', locdata, time=-1)
@@ -253,24 +231,12 @@ for i in range(n):
             uxy_s_gif[i, :, :, :] = u_gif
 
     if sGIFS3D == 1:
-        if dtt[i] == 3:
-            maskbedgif3, xc, yc = yf.LoadYelmo3D(
-                experiments[i], 'mask_bed', locdata)
-            maskbedgif3 = yf.convert_array_dtt(maskbedgif3, dtt[i], lent2D, lenx, leny)[times2plot, :, :]
-            zmask_bed_gif3[i, :, :, :] = maskbedgif3
-        else:
-            maskbedgif3, xc, yc = yf.LoadYelmo3D(experiments[i], 'mask_bed', locdata, time=times2plot)
-            zmask_bed_gif3[i, :, :, :] = maskbedgif3
+        maskbedgif3, xc, yc = yf.LoadYelmo3D(experiments[i], 'mask_bed', locdata, time=times2plot)
+        zmask_bed_gif3[i, :, :, :] = maskbedgif3
         
 
         if zgif3D == 1:
-            if dtt[i] == 3:
-                z_gif3, xc, yc = yf.LoadYelmo3D(
-                    experiments[i], 'z_srf', locdata)
-                z_gif3 = yf.convert_array_dtt(z_gif3, dtt[i], lent2D, lenx, leny)
-                z_gif3 = z_gif3[times2plot, :, :]
-            else:
-                z_gif3, xc, yc = yf.LoadYelmo3D(
+            z_gif3, xc, yc = yf.LoadYelmo3D(
                     experiments[i], 'z_srf', locdata, time=times2plot)
 
             if control_run != None:
@@ -282,12 +248,7 @@ for i in range(n):
             z_gif3 = ma.masked_where(maskbedgif3 == 0, z_gif3)
             z_srf_gif3[i, :, :, :] = z_gif3/1000
         if hgif3D == 1:
-            if dtt[i] == 3:
-                Hgif3, xc, yc = yf.LoadYelmo3D(experiments[i], 'H_grnd',  locdata)
-                Hgif3 = yf.convert_array_dtt(Hgif3, dtt[i], lent2D, lenx, leny)
-                Hgif3 = Hgif3[times2plot, :, :]
-            else:
-                Hgif3, xc, yc = yf.LoadYelmo3D(experiments[i], 'H_grnd',  locdata, time=times2plot)
+            Hgif3, xc, yc = yf.LoadYelmo3D(experiments[i], 'H_grnd',  locdata, time=times2plot)
 
             if control_run != None:
                 ref = yf.LoadYelmo3D(control_run, 'H_grnd', locdata, time=-1)
@@ -299,7 +260,7 @@ for i in range(n):
 
 # -- Plots
 if sVAF == 1:
-    ypf.comPlot1D(VAFdata, dVAFdata, r'VAF', r'm', r'$\Delta$VAF', r'm', 'yr', [0, 100, 200, 300, 400, 500], locplot+out_fldr, shades, text=False,
+    ypf.comPlot1D(VAFdata, dVAFdata, r'VAF', r'm', r'$\Delta$VAF', r'm', units1D, xticks1D, xtickslab1D, locplot+out_fldr, shades, text=False,
                   labels=experiments, color=color, linestyles=linestyles, markers=markers, linewidths=linewidths, file_name='vaf-'+plot_name, fontsize=fnt_size1D)
 if sHCHANGE == 1:
     ypf.Map2D(H_change, xc, yc, r'Grounded Ice thickness change (Relative change)', experiments, np.arange(0, 1.1, 0.1),

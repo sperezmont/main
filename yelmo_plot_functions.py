@@ -74,10 +74,11 @@ def Plot1D(data, name, units, time_units, plotpath, shades=[],  labels=['ABUC', 
         ax.tick_params(axis='x', labelsize=0.8*fontsize)
         ax.tick_params(axis='y', labelsize=0.8*fontsize)
     ax.legend(fontsize=0.8*fontsize)
+    plt.tight_layout()
     plt.savefig(plotpath + file_name)
 
 
-def comPlot1D(data1, data2, name1, units1, name2, units2, time_units, xticks, plotpath, shades=[], text=False, labels=['ABUC', 'ABUK', 'ABUM'], color=['blue', 'red', 'orange'], linestyles=['solid', 'solid', 'solid'], markers=[None, None, None], linewidths=[2, 2, 2], file_name='cplot1D.png', fontsize=20):
+def comPlot1D(data1, data2, name1, units1, name2, units2, time_units, xticks, xtickslab, plotpath, shades=[], text=False, labels=['ABUC', 'ABUK', 'ABUM'], color=['blue', 'red', 'orange'], linestyles=['solid', 'solid', 'solid'], markers=[None, None, None], linewidths=[2, 2, 2], file_name='cplot1D.png', fontsize=20):
     ''' Plots the time series of two 1D variables \n
         data1.shape = nexps, ntimes 
     '''
@@ -86,13 +87,18 @@ def comPlot1D(data1, data2, name1, units1, name2, units2, time_units, xticks, pl
     fig.subplots_adjust(right=0.8)
     ax, data, names, units = [ax1, ax2], [
         data1, data2], [name1, name2], [units1, units2]
+
     alpha = [1, 0.7, 0.5]
     shadecolor = ['lightblue', 'lightcoral', 'yellow']
     for i in range(2):
         if shades != []:
             for j in range(3):
-                ax[i].fill_between(np.arange(0, ntimes, round(ntimes/51)), shades[j, i, 0, :],
+                stepping = ntimes/len(shades[j,i,0,:])
+                ax[i].fill_between(np.arange(0, ntimes, stepping), shades[j, i, 0, :],
                                    shades[j, i, 1, :], alpha=alpha[j], color=shadecolor[j], edgecolor=shadecolor[j])
+            ax[i].set_xlim([0, len(shades[j,i,0,:])])
+        else:
+            ax[i].set_xlim([0, ntimes])
         for j in range(nexps):
             label = LatexFormatter(labels[j])
             ax[i].plot(data[i][j, :], color=color[j],
@@ -100,15 +106,20 @@ def comPlot1D(data1, data2, name1, units1, name2, units2, time_units, xticks, pl
             if text == True:
                 ax[i].text(450, 0.98*data[i][j, -1], r''+str(round(data[i][j, -1], 1)) + ' ' +
                            units[i], color=color[j], fontsize=fontsize, horizontalalignment='center')
-        ax[i].set_xlim([0, ntimes-1])
+
         ax[i].set_xticks(xticks)
+        ax[i].set_xticklabels(xtickslab)
         ax[i].grid(linestyle='--', alpha=0.5)
         ax[i].set_xlabel(r'Time (' + time_units + ')', fontsize=fontsize)
         ax[i].set_ylabel(r''+names[i] + ' (' + units[i] + ')',
                          fontsize=fontsize)
         ax[i].tick_params(axis='x', labelsize=0.8*fontsize)
         ax[i].tick_params(axis='y', labelsize=0.8*fontsize)
-    ax2.legend(fontsize=0.8*fontsize, bbox_to_anchor=(1, 0.8))
+    if nexps == 1:
+        ax2.legend(fontsize=0.8*fontsize)
+    else:
+        ax2.legend(fontsize=0.8*fontsize, bbox_to_anchor=(1, 0.8))
+    plt.tight_layout()
     plt.savefig(plotpath + file_name)
 
 # 2D variables
@@ -178,11 +189,16 @@ def Map2D(data, x, y, bar_name, exp_names, levels, contours, contours_levels, cm
     if set_ax == 'Off':
         pad = 0
 
+    if (nrows == 1) & (ncols == 1):
+        shrink = 1
+    else:
+        shrink = 0.6
+
     if log_scale:
-        cb = fig.colorbar(im, ax=axes, pad=pad, shrink=0.6,
+        cb = fig.colorbar(im, ax=axes, pad=pad, shrink=shrink,
                           ticks=locator, orientation='horizontal')
     else:
-        cb = fig.colorbar(im, ax=axes, pad=pad, shrink=0.6,
+        cb = fig.colorbar(im, ax=axes, pad=pad, shrink=shrink,
                           orientation='horizontal')
 
     cb.ax.tick_params(labelsize=fontsize)

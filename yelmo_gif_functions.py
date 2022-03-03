@@ -127,11 +127,16 @@ def Map2DI(data, time, x, y, bar_name, exp_names, levels, contours, con_levels, 
     if set_ax == 'Off':
         pad = 0
 
+    if (nrows == 1) & (ncols == 1):
+        shrink = 1
+    else:
+        shrink = 0.6
+
     if log_scale:
-        cb = fig.colorbar(im, ax=axes, pad=pad, shrink=0.6,
+        cb = fig.colorbar(im, ax=axes, pad=pad, shrink=shrink,
                           ticks=locator, orientation='horizontal')
     else:
-        cb = fig.colorbar(im, ax=axes, pad=pad, shrink=0.6,
+        cb = fig.colorbar(im, ax=axes, pad=pad, shrink=shrink,
                           orientation='horizontal')
 
     cb.ax.tick_params(labelsize=fontsize)

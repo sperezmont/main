@@ -161,10 +161,10 @@ def intersperse(lst, item, lenlst, factor):
         Adapted from https://stackoverflow.com/questions/5920643/add-an-item-between-each-item-already-in-the-list 
     '''
     result = [item] * lenlst
-    if len(lst) % 2 == 0:
-        result[::factor] = lst[:-1]
-    else:
+    if lenlst % factor == 0:
         result[::factor] = lst
+    else:
+        result[:(len(lst)-1):factor] = lst
     return result
 
 def convert_dtt(darray, item, time_step, len2convert):
