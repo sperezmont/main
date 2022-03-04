@@ -75,19 +75,23 @@ def LoadCSVList(file, sourpath):
 # Operations
 
 
-def SLE(data, rhoi=0.9167, rhosw=1.027, A_oc=3.618*10**8):
+def SLE(data, rhoi=0.9167, rhow=1.0, A_oc=3.618*10**8):
     ''' Transforms volume data to m SLE \n
-        [data] = km**3 
+        [data] = km**3 \n
+        rhow = 1 Gt/m3 -> "disregarding the minor salinity/density effects of mixing fresh meltwater with seawater"
+            More about: https://sealevel.info/conversion_factors.html
     '''
-    SLE = rhoi/rhosw * 1e3 / A_oc * data
+    SLE = rhoi/rhow * 1e3 / A_oc * data
     return SLE
 
 
-def SLR(data, rhoi=0.9167, rhosw=1.027, A_oc=3.618*10**8):
+def SLR(data, rhoi=0.9167, rhow=1, A_oc=3.618*10**8):
     ''' Transforms volume data to m SLE and calculates the SLR for each time step \n
-        [data] = km**3 
+        [data] = km**3 \n
+        rhow = 1 Gt/m3 -> "disregarding the minor salinity/density effects of mixing fresh meltwater with seawater"
+            More about: https://sealevel.info/conversion_factors.html 
     '''
-    SLE = rhoi/rhosw * 1e3 / A_oc * data
+    SLE = rhoi/rhow * 1e3 / A_oc * data
     SLR = np.subtract(SLE[0], SLE)
     return SLR
 

@@ -84,7 +84,6 @@ def comPlot1D(data1, data2, name1, units1, name2, units2, time_units, xticks, xt
     '''
     nexps, ntimes = np.shape(data1)
     fig, [ax1, ax2] = plt.subplots(1, 2, figsize=(18, 8))
-    fig.subplots_adjust(right=0.8)
     ax, data, names, units = [ax1, ax2], [
         data1, data2], [name1, name2], [units1, units2]
 
@@ -93,8 +92,8 @@ def comPlot1D(data1, data2, name1, units1, name2, units2, time_units, xticks, xt
     for i in range(2):
         if shades != []:
             for j in range(3):
-                stepping = ntimes/len(shades[j,i,0,:])
-                ax[i].fill_between(np.arange(0, ntimes, stepping), shades[j, i, 0, :],
+                stepping = (ntimes-1)/(len(shades[j,i,0,:])-1)
+                ax[i].fill_between(np.arange(0, ntimes -1 + stepping, stepping), shades[j, i, 0, :],
                                    shades[j, i, 1, :], alpha=alpha[j], color=shadecolor[j], edgecolor=shadecolor[j])
             ax[i].set_xlim([0, len(shades[j,i,0,:])])
         else:
@@ -115,10 +114,8 @@ def comPlot1D(data1, data2, name1, units1, name2, units2, time_units, xticks, xt
                          fontsize=fontsize)
         ax[i].tick_params(axis='x', labelsize=0.8*fontsize)
         ax[i].tick_params(axis='y', labelsize=0.8*fontsize)
-    if nexps == 1:
-        ax2.legend(fontsize=0.8*fontsize)
-    else:
-        ax2.legend(fontsize=0.8*fontsize, bbox_to_anchor=(1, 0.8))
+    ax2.legend(fontsize=0.8*fontsize)
+    
     plt.tight_layout()
     plt.savefig(plotpath + file_name)
 

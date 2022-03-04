@@ -63,7 +63,7 @@ def Map2DI(data, time, x, y, bar_name, exp_names, levels, contours, con_levels, 
         nrows, ncols = fig_size
 
     fig = plt.figure(figsize=(7*ncols, 8*nrows))
-    fig.suptitle(r'Time = ' + str((time)*10) + ' yrs', fontsize=fontsize)
+    fig.suptitle(r'Time = ' + str((time)) + ' yrs', fontsize=fontsize)
     if vis == '3D':
         X, Y = np.meshgrid(x, y)
 

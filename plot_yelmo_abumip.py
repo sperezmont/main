@@ -13,15 +13,15 @@ import netCDF4 as nc
 
 # Variables
 # GENERIC
-locplot = '/home/sergio/entra/proyects/ABUMIP/proyects/abumip_yelmo-v1.75/'
-locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/abumip_yelmo-v1.75/'
+locplot = '/home/sergio/entra/proyects/ABUMIP/proyects/abumip_yelmo-v1.75/' #
+locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/abumip_yelmo-v1.75/'    # abuk_02_yelmo-v1.75
 locsources = '/home/sergio/entra/ice_data/sources/ABUMIP_shades/'
 locbasins = '/home/sergio/entra/ice_data/Antarctica/ANT-32KM/ANT-32KM_BASINS-nasa.nc'
 
-experiments = ['abuc','abuk','abum']#['dtt3.0']  #
+experiments = ['abuc','abuk','abum'] # ['dtt3.0']
 control_run = None  # 'abuc_01'  # set to None if needed
-out_fldr = '/abumip_01_32KM/'
-plot_name, gif_name, gif3_name = 'yelmo_abumip_01-32KM.png', 'yelmo_abumip_01-32KM.gif', 'yelmo_abumip_01-32KM_3D.gif'
+out_fldr = '/abumip_01_32KM/' # '/abuk_02-marine_32KM/'
+plot_name, gif_name, gif3_name = 'yelmo_abumip_01-32KM.png', 'yelmo_abumip_01-32KM.gif', 'yelmo_abumip_01-32KM_3D.gif' # 'yelmo_abuk-marine_02_dtt3.0-32KM.png', 'yelmo_abuk-marine_02_dtt3.0-32KM.gif', 'yelmo_abuk-marine_02_dtt3.0-32KM_3D.gif' #
 set_ax = 'Off'  # Do you want to draw axis?
 
 # PLOTTING
@@ -31,18 +31,19 @@ linestyles = 3*['solid'] #'solid', 'solid', 'solid', 'solid', 'solid']
 markers = 3*[None]
 linewidths = 3*[4]#, 8, 4, 4, 4, 4]
 fig_size = [1, 3]  # nrows, ncols
-fnt_size1D, fnt_size2D = 20, 22#28, 35  # fontsize
+fnt_size1D, fnt_size2D = 20, 22  # 28, 35  # fontsize
 
-xticks1D = np.arange(0,501,501/6) # 0, 501, 506/6 
+xticks1D = list(np.arange(0, 500 + 500/5, 500/5)) # list(np.arange(0, 167 + 167/5, 167/5))  # list(np.arange(0, 100 + 100/5, 100/5))
 xtickslab1D = [0, 100, 200, 300, 400, 500]
-units1D = 'yr' # '10 yr'
+units1D = 'yr'
 
 # GIFs
 FPS = 1.5
-times2plot = range(0,51,1) #range(0,17,1)#[0, 1, 2, 3, 4, 5, 7, 9, 10, 13, 15, 18, 20, 25, 30, 35, 40, 45, 50]  # list(np.arange(0, 52, 2))
+times2plot = range(0,51,1) # range(0,17,1) #   [0, 1, 2, 3, 4, 5, 7, 9, 10, 13, 15, 18, 20, 25, 30, 35, 40, 45, 50]  # list(np.arange(0, 52, 2))
+times2plot_labels = list(np.round(np.arange(0,500+500/50,500/50)))
 
 # YELMO simulation
-res, lenx, leny, lent, lent2D = 32, 191, 191, 501, 51# 168, 17#101, 51
+res, lenx, leny, lent, lent2D = 32, 191, 191, 501, 51 # 168, 17 # 101, 51
 region_names = ['WAIS', 'EAIS', 'PAIS']
 basin_names = ['1, Filchner-Ronne RSB', '2, Riiser-Larsen, Stancomb, Brunt', '3, Fimbul', '4, Baudouin', '5, Shirase, Holmes', '6, Amery', '7, Shackleton, West', '8, Totten (ASB)', '9, Cook, Ninnis, Mertz (WSB)',
                '10, Rennick (WSB)', '11, Drygalski (WSB)', '12, Ross', '13, Getz', '14, Pine Island, Thwaites (AMS)', '15, Abbot', '16, Wilkins, Stange, Bach, George VI', '17', '18, Larsen C', '19']
@@ -275,19 +276,19 @@ if sUXY == 1:
 if sGIFS == 1:
     if szgif == 1:
         ygf.map2gif(xc, yc, z_srf_gif, r'Ice surface elevation (km)',
-                    experiments, times2plot, np.arange(0, 4.5+0.1, 0.1), contours=zmask_bed_gif, con_levels=[1, 4], cmap='jet', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='zsurf-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
+                    experiments, times2plot_labels, np.arange(0, 4.5+0.1, 0.1), contours=zmask_bed_gif, con_levels=[1, 4], cmap='jet', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='zsurf-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
         # ygf.mkGif(xc, yc, z_srf_gif, r'Ice surface elevation (km)',
         #          experiments, times2plot, np.arange(0, 4.5+0.1, 0.1), contours=zmask_bed_gif, con_levels=[1, 4], cmap='jet', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='zsurf-'+gif_name)
     if shgif == 1:
         ygf.map2gif(xc, yc, H_grnd_gif, r'Grounded ice thickness (m)',
-                    experiments, times2plot, np.arange(0, 4500+500, 500), contours=zmask_bed_gif, con_levels=[1, 4], cmap='cmo.ice_r', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='Hgrnd-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
+                    experiments, times2plot_labels, np.arange(0, 4500+500, 500), contours=zmask_bed_gif, con_levels=[1, 4], cmap='cmo.ice_r', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='Hgrnd-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
     if sugif == 1:
         ygf.map2gif(xc, yc, uxy_s_gif, r'Ice surface velocity (m/yr)',
-                    experiments, times2plot, [0, 1e4], contours=zmask_bed_gif, con_levels=[1, 4], cmap='cmo.solar_r', log_scale=True, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='uxys-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
+                    experiments, times2plot_labels, [0, 1e4], contours=zmask_bed_gif, con_levels=[1, 4], cmap='cmo.solar_r', log_scale=True, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='uxys-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
 if sGIFS3D == 1:
     if zgif3D == 1:
         ygf.map2gif(xc, yc, z_srf_gif3, r'Ice surface elevation (km)',
-                    experiments, times2plot, np.arange(0, 4.5+0.1, 0.1), contours=zmask_bed_gif3, con_levels=[1, 4], cmap='jet', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='zsurf-'+gif3_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax, vis='3D')
+                    experiments, times2plot_labels, np.arange(0, 4.5+0.1, 0.1), contours=zmask_bed_gif3, con_levels=[1, 4], cmap='jet', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='zsurf-'+gif3_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax, vis='3D')
     if hgif3D == 1:
         ygf.map2gif(xc, yc, H_grnd_gif3, r'Grounded ice thickness (m)',
-                    experiments, times2plot, np.arange(0, 4500+500, 500), contours=zmask_bed_gif3, con_levels=[1, 4], cmap='cmo.ice_r', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='Hgrnd-'+gif3_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax, vis='3D')
+                    experiments, times2plot_labels, np.arange(0, 4500+500, 500), contours=zmask_bed_gif3, con_levels=[1, 4], cmap='cmo.ice_r', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='Hgrnd-'+gif3_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax, vis='3D')
