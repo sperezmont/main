@@ -260,16 +260,16 @@ for i in range(n):
 
 # -- Plots
 if sVAF == 1:
-    ypf.comPlot1D(VAFdata, dVAFdata, r'VAF', r'm', r'$\Delta$VAF', r'm', units1D, xticks1D, xtickslab1D, locplot+out_fldr, shades, text=False,
+    ypf.comPlot1D(VAFdata, dVAFdata, r'VAF', r'm SLE', r'$\Delta$VAF', r'm SLE', units1D, xticks1D, xtickslab1D, locplot+out_fldr, shades, text=False,
                   labels=experiments, color=color, linestyles=linestyles, markers=markers, linewidths=linewidths, file_name='vaf-'+plot_name, fontsize=fnt_size1D)
 if sHCHANGE == 1:
-    ypf.Map2D(H_change, xc, yc, r'Grounded Ice thickness change (Relative change)', experiments, np.arange(0, 1.1, 0.1),
+    ypf.Map2D(H_change, xc, yc, r'Grounded Ice thickness Relative change', experiments, np.arange(0, 1.1, 0.1),
               contours=hmask_bed, contours_levels=[1, 4], cmap='cmo.tempo', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='Hchange-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
 if sZSRF == 1:
     ypf.Map2D(z_srf, xc, yc, r'Ice surface elevation (km)', experiments, np.arange(0, 4.5+0.1, 0.1),
               contours=zmask_bed, contours_levels=[1, 4], cmap='jet', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='zsurf-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
 if sUXY == 1:
-    ypf.Map2D(uxy_s, xc, yc, r'Ice surface velocity (m/a)', experiments, [0, 1e4],
+    ypf.Map2D(uxy_s, xc, yc, r'Ice surface velocity (m/yr)', experiments, [0, 1e4],
               contours=zmask_bed, contours_levels=[1, 4], cmap='cmo.solar_r', log_scale=True, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='uxys-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
 
 if sGIFS == 1:
@@ -282,7 +282,7 @@ if sGIFS == 1:
         ygf.map2gif(xc, yc, H_grnd_gif, r'Grounded ice thickness (m)',
                     experiments, times2plot, np.arange(0, 4500+500, 500), contours=zmask_bed_gif, con_levels=[1, 4], cmap='cmo.ice_r', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='Hgrnd-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
     if sugif == 1:
-        ygf.map2gif(xc, yc, uxy_s_gif, r'Ice surface velocity (m/a)',
+        ygf.map2gif(xc, yc, uxy_s_gif, r'Ice surface velocity (m/yr)',
                     experiments, times2plot, [0, 1e4], contours=zmask_bed_gif, con_levels=[1, 4], cmap='cmo.solar_r', log_scale=True, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='uxys-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
 if sGIFS3D == 1:
     if zgif3D == 1:
