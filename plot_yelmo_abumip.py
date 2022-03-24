@@ -28,23 +28,23 @@ sGIFS, szgif, shgif, sugif, sGLBMBGIF = 1, 0, 0, 0, 0
 sGIFS3D, zgif3D, hgif3D = 0, 0, 0   # only one at a time
 
 # Experiment
-locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/bmb-dtt_yelmo-v1.75/'    #  abumip_yelmo-v1.75 abuk_02_yelmo-v1.75 abum_03_yelmo-v1.75 abum_04_yelmo-v1.75 abum_05_yelmo-v1.75 abuc_02_yelmo-v1.75 dtt-eps_yelmo-v1.75
-experiments = ['abuc_fcmp_dtt0.5', 'abuc_pmp_dtt0.5', 'abuc_nmp_dtt0.5',
-                'abum_fcmp_dtt0.5', 'abum_pmp_dtt0.5', 'abum_nmp_dtt0.5'] #['abuc_fcmp_dtt0.5', 'abuc_pmp_dtt0.5', 'abuc_nmp_dtt0.5'] # ['fcmp_fmb0.0', 'pmp_fmb0.0', 'nmp_fmb0.0','fcmp_fmb1.0', 'pmp_fmb1.0', 'nmp_fmb1.0','fcmp_fmb10.0', 'pmp_fmb10.0', 'nmp_fmb10.0'] #['fcmp_dtt3.0', 'pmp_dtt3.0', 'nmp_dtt3.0'] # ['fcmp', 'pmp', 'nmp'] # ['dtt3.0'] # ['abuc','abuk','abum']
+locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/bmb-fmb_yelmo-v1.75/'    #  abumip_yelmo-v1.75 abuk_02_yelmo-v1.75 abum_03_yelmo-v1.75 abum_04_yelmo-v1.75 abum_05_yelmo-v1.75 abuc_02_yelmo-v1.75 dtt-eps_yelmo-v1.75
+experiments = ['abuc_fcmp_fmb10.0', 'abuc_pmp_fmb10.0', 'abuc_nmp_fmb10.0',
+             'abum_fcmp_fmb10.0', 'abum_pmp_fmb10.0', 'abum_nmp_fmb10.0'] # ['fcmp_fmb10.0', 'pmp_fmb10.0', 'nmp_fmb10.0','fcmp_fmb1.0', 'pmp_fmb1.0', 'nmp_fmb1.0','fcmp_fmb10.0', 'pmp_fmb10.0', 'nmp_fmb10.0'] #['fcmp_dtt3.0', 'pmp_dtt3.0', 'nmp_dtt3.0'] # ['fcmp', 'pmp', 'nmp'] # ['dtt3.0'] # ['abuc','abuk','abum']
 control_run = None  # 'abuc_01'  # set to None if needed
-out_fldr = '/bmb-dtt_32KM/' # '/abuk_02-marine_32KM/' # '/abumip_01_32KM/'
+out_fldr = '/bmb-fmb_32KM/' # '/abuk_02-marine_32KM/' # '/abumip_01_32KM/'
 
 # PLOTTING
-plot_name = 'yelmo_bmb-dtt0.5-32KM.png' #'yelmo_abum_03-32KM.png', 'yelmo_abum_03-32KM.gif', 'yelmo_abum_03-32KM_3D.gif' # 'yelmo_abuk-marine_02_dtt3.0-32KM.png', 'yelmo_abuk-marine_02_dtt3.0-32KM.gif', 'yelmo_abuk-marine_02_dtt3.0-32KM_3D.gif' # 'yelmo_abumip_01-32KM.png', 'yelmo_abumip_01-32KM.gif', 'yelmo_abumip_01-32KM_3D.gif' 
+plot_name = 'yelmo_bmb-fmb10.0-32KM.png' #'yelmo_abum_03-32KM.png', 'yelmo_abum_03-32KM.gif', 'yelmo_abum_03-32KM_3D.gif' # 'yelmo_abuk-marine_02_dtt3.0-32KM.png', 'yelmo_abuk-marine_02_dtt3.0-32KM.gif', 'yelmo_abuk-marine_02_dtt3.0-32KM_3D.gif' # 'yelmo_abumip_01-32KM.png', 'yelmo_abumip_01-32KM.gif', 'yelmo_abumip_01-32KM_3D.gif' 
 shades1D = [1, 0, 1]    # abuc, abuk, abum | from Sun et al., 2020
 color = ['navy', 'blue', 'grey', 'maroon','orange','darkgoldenrod'] # ['brown'] # ['blue', 'red', 'orange'] #['black', 'blue', 'red', 'green', 'darkgrey', 'lightblue', 'orange', 'lime']
-linestyles = 3*['solid'] # 3*['solid'] #'solid', 'solid', 'solid', 'solid', 'solid']
+linestyles = 2*['solid','dashed', 'dotted'] # 3*['solid'] #'solid', 'solid', 'solid', 'solid', 'solid']
 markers = 9*[None]
-linewidths = [4, 4, 4, 4, 4]#[2, 2, 2, 4, 4, 4, 2, 2, 2]#, 8, 4, 4, 4, 4]
+linewidths = [4, 4, 4, 4, 4, 4]#[2, 2, 2, 4, 4, 4, 2, 2, 2]#, 8, 4, 4, 4, 4]
 fig_size = [2, 3]  # nrows, ncols
 fnt_size1D, fnt_size2D = 28, 30  # 28, 35  # fontsize
 
-xtickslab1D = [0, 100, 200, 300, 400, 500]
+xtickslab1D = [0, 100, 200, 300, 400, 500] # [0, 5000, 10000, 15000, 20000, 25000, 30000] # 
 units1D = 'yr'
 
 set_ax = 'Off'  # Do you want to draw axis?
