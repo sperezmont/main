@@ -28,4 +28,4 @@ You may also need to install LaTeX
 ```bash
 sudo apt-get install dvipng texlive-latex-extra texlive-fonts-recommended cm-super
 ```
-This will install also the needed packages for render the plots
+This will install also the needed packages for rendering the plots
