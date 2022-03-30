@@ -4,6 +4,7 @@
 * yelmo_plot_functions.py   2021.12.22	General functions to plot Yelmo outputs 
 * yelmo_gif_functions.py    2022.01.13	General functions to make gifs with Yelmo outputs
 * yelmo_plot_functions.py   2022.03.01  Script for plotting results (ABUMIP oriented)
+* manual_heatmap.py         2022.03.29  Script for plotting a variable (scalar) of different experiments versus parameter values or the value of a variable as a function of two parameters
 
 # Quick guide
 Clone `yelmo_tools`
