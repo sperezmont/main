@@ -78,7 +78,7 @@ def Plot1D(data, name, units, time_units, plotpath, shades=[],  labels=['ABUC', 
     plt.savefig(plotpath + file_name)
 
 
-def comPlot1D(data1, data2, name1, units1, name2, units2, time_units, xticks, xtickslab, plotpath, shades=[], text=False, labels=['ABUC', 'ABUK', 'ABUM'], color=['blue', 'red', 'orange'], linestyles=['solid', 'solid', 'solid'], markers=[None, None, None], linewidths=[2, 2, 2], file_name='cplot1D.png', fontsize=20):
+def comPlot1D(data1, data2, name1, units1, name2, units2, time_units, xticks, xtickslab, ylimits, plotpath, shades=[], text=False, labels=['ABUC', 'ABUK', 'ABUM'], color=['blue', 'red', 'orange'], linestyles=['solid', 'solid', 'solid'], markers=[None, None, None], linewidths=[2, 2, 2], file_name='cplot1D.png', fontsize=20):
     ''' Plots the time series of two 1D variables \n
         data1.shape = nexps, ntimes 
     '''
@@ -106,6 +106,9 @@ def comPlot1D(data1, data2, name1, units1, name2, units2, time_units, xticks, xt
                 ax[i].text(450, 0.98*data[i][j, -1], r''+str(round(data[i][j, -1], 1)) + ' ' +
                            units[i], color=color[j], fontsize=fontsize, horizontalalignment='center')
 
+        if ylimits[i] != []:
+            ax[i].set_ylim(ylimits[i])
+            
         ax[i].set_xticks(xticks)
         ax[i].set_xticklabels(xtickslab)
         ax[i].grid(linestyle='--', alpha=0.5)

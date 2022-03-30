@@ -16,6 +16,35 @@ import netCDF4 as nc
 
 # Load functions
 
+def LoadYelmo(exp_path, var_name, time=None, yelmo_file='yelmo2D.nc'):
+    ''' Loads var_name from exp_path/yelmo_file \n
+        yelmo_file values are 'yelmo1D.nc', 'yelmo2D.nc'
+    '''
+    yelmoNC = nc.Dataset(exp_path + '/' + yelmo_file)
+
+    if yelmo_file == 'yelmo1D.nc':
+        if time == None:
+            data = yelmoNC.variables[var_name][:]
+        else:
+            data = yelmoNC.variables[var_name][time]
+        return data
+    elif yelmo_file == 'yelmo2D.nc':
+        try:
+            if time == None:
+                data = yelmoNC.variables[var_name][:]
+            else:
+                data = yelmoNC.variables[var_name][time]
+        except:
+            try:
+                data = yelmoNC.variables[var_name][:, :]
+            except:
+                if time == None:
+                    data = yelmoNC.variables[var_name][:, :, :]
+                else:
+                    data = yelmoNC.variables[var_name][time, :, :]
+        return data
+    else:
+        raise NameError(yelmo_file + ' is not defined')
 
 def LoadYelmo1D(exp_name, var_name, datapath, time=None):
     ''' Loads 1D var_name from datapath/exp_name/yelmo1D.nc '''

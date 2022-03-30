@@ -29,23 +29,25 @@ sGIFS3D, zgif3D, hgif3D = 0, 0, 0   # only one at a time
 
 # Experiment
 locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/bmb-fmb_yelmo-v1.75/'    #  abumip_yelmo-v1.75 abuk_02_yelmo-v1.75 abum_03_yelmo-v1.75 abum_04_yelmo-v1.75 abum_05_yelmo-v1.75 abuc_02_yelmo-v1.75 dtt-eps_yelmo-v1.75
-experiments = ['abuc_fcmp_fmb10.0', 'abuc_pmp_fmb10.0', 'abuc_nmp_fmb10.0',
-             'abum_fcmp_fmb10.0', 'abum_pmp_fmb10.0', 'abum_nmp_fmb10.0'] # ['fcmp_fmb10.0', 'pmp_fmb10.0', 'nmp_fmb10.0','fcmp_fmb1.0', 'pmp_fmb1.0', 'nmp_fmb1.0','fcmp_fmb10.0', 'pmp_fmb10.0', 'nmp_fmb10.0'] #['fcmp_dtt3.0', 'pmp_dtt3.0', 'nmp_dtt3.0'] # ['fcmp', 'pmp', 'nmp'] # ['dtt3.0'] # ['abuc','abuk','abum']
+experiments = ['abum_fcmp_fmb0.0', 'abum_pmp_fmb0.0', 'abum_nmp_fmb0.0',
+               'abum_fcmp_fmb1.0', 'abum_pmp_fmb1.0', 'abum_nmp_fmb1.0',
+               'abum_fcmp_fmb10.0', 'abum_pmp_fmb10.0', 'abum_nmp_fmb10.0'] #['fcmp_dtt3.0', 'pmp_dtt3.0', 'nmp_dtt3.0'] # ['fcmp', 'pmp', 'nmp'] # ['dtt3.0'] # ['abuc','abuk','abum']
 control_run = None  # 'abuc_01'  # set to None if needed
 out_fldr = '/bmb-fmb_32KM/' # '/abuk_02-marine_32KM/' # '/abumip_01_32KM/'
 
 # PLOTTING
-plot_name = 'yelmo_bmb-fmb10.0-32KM.png' #'yelmo_abum_03-32KM.png', 'yelmo_abum_03-32KM.gif', 'yelmo_abum_03-32KM_3D.gif' # 'yelmo_abuk-marine_02_dtt3.0-32KM.png', 'yelmo_abuk-marine_02_dtt3.0-32KM.gif', 'yelmo_abuk-marine_02_dtt3.0-32KM_3D.gif' # 'yelmo_abumip_01-32KM.png', 'yelmo_abumip_01-32KM.gif', 'yelmo_abumip_01-32KM_3D.gif' 
-shades1D = [1, 0, 1]    # abuc, abuk, abum | from Sun et al., 2020
-color = ['navy', 'blue', 'grey', 'maroon','orange','darkgoldenrod'] # ['brown'] # ['blue', 'red', 'orange'] #['black', 'blue', 'red', 'green', 'darkgrey', 'lightblue', 'orange', 'lime']
-linestyles = 2*['solid','dashed', 'dotted'] # 3*['solid'] #'solid', 'solid', 'solid', 'solid', 'solid']
+plot_name = 'yelmo_abum_bmb-fmb-32KM.png' #'yelmo_abum_03-32KM.png', 'yelmo_abum_03-32KM.gif', 'yelmo_abum_03-32KM_3D.gif' # 'yelmo_abuk-marine_02_dtt3.0-32KM.png', 'yelmo_abuk-marine_02_dtt3.0-32KM.gif', 'yelmo_abuk-marine_02_dtt3.0-32KM_3D.gif' # 'yelmo_abumip_01-32KM.png', 'yelmo_abumip_01-32KM.gif', 'yelmo_abumip_01-32KM_3D.gif' 
+shades1D = [0, 0, 1]    # abuc, abuk, abum | from Sun et al., 2020
+color = 3*['orange', 'navy', 'green']
+linestyles = ['solid', 'solid', 'solid', 'dashed', 'dashed', 'dashed', 'dotted', 'dotted', 'dotted']
 markers = 9*[None]
-linewidths = [4, 4, 4, 4, 4, 4]#[2, 2, 2, 4, 4, 4, 2, 2, 2]#, 8, 4, 4, 4, 4]
-fig_size = [2, 3]  # nrows, ncols
+linewidths = [2, 2, 2, 3, 3, 3, 4, 4, 4]#[2, 2, 2, 4, 4, 4, 2, 2, 2]#, 8, 4, 4, 4, 4]
+fig_size = [3, 3]  # nrows, ncols
 fnt_size1D, fnt_size2D = 28, 30  # 28, 35  # fontsize
 
 xtickslab1D = [0, 100, 200, 300, 400, 500] # [0, 5000, 10000, 15000, 20000, 25000, 30000] # 
 units1D = 'yr'
+vaf_lim = [[20, 65],[-2.5, 35]] # VAF fig limits
 
 set_ax = 'Off'  # Do you want to draw axis?
 
@@ -184,6 +186,7 @@ for i in range(n):
             f.write('#### ' + experiments[i] + ' ####' + '\n')
             f.write('\n')
             f.write('** Contribution to sea-level rise by each region **' + '\n')
+            f.write('AIS --> '+ str(np.sum(Hreg_change[i, :])) +'   m SLE' + '\n')
             for j in range(len(region_names)):
                 f.write(region_names[j] + ' --> ' +
                         str(Hreg_change[i, j])+'    m SLE' + '\n')
@@ -292,7 +295,7 @@ for i in range(n):
 
 # -- Plots
 if sVAF == 1:
-    ypf.comPlot1D(VAFdata, dVAFdata, r'VAF', r'm SLE', r'$\Delta$VAF', r'm SLE', units1D, xticks1D, xtickslab1D, locplot+out_fldr, shades, text=False,
+    ypf.comPlot1D(VAFdata, dVAFdata, r'VAF', r'm SLE', r'$\Delta$VAF', r'm SLE', units1D, xticks1D, xtickslab1D, vaf_lim, locplot+out_fldr, shades, text=False,
                   labels=experiments, color=color, linestyles=linestyles, markers=markers, linewidths=linewidths, file_name='vaf-'+plot_name, fontsize=fnt_size1D)
 if sHCHANGE == 1:
     ypf.Map2D(H_change, xc, yc, r'Grounded Ice thickness Relative change', experiments, np.arange(0, 1.1, 0.1),
