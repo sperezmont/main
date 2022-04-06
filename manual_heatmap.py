@@ -4,7 +4,7 @@
     Date: 29.03.2022\n
 
     Aim: Script for plotting a variable (scalar) of different experiments versus parameter value \n
-        or the value of a variable as a function ofd two parameters \n
+        or the value of a variable as a function of two parameters \n
 
 """
 # Libraries

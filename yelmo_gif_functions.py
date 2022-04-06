@@ -163,6 +163,10 @@ def map2gif(x, y, data, bar_name, exp_names, times, levels, contours=[], con_lev
     else:
         outname = plotpath + file_name
 
-    imageio.mimsave(outname, [Map2DI(data[:, i, :, :], times[i], x, y, bar_name, exp_names, levels, contours[:, i, :, :], con_levels, cmap, log_scale, fig_size, fontsize, base=base, ltresh=ltresh, lscale=lscale, subs=subs, set_ax=set_ax, vis=vis)
+    if contours != []:
+        imageio.mimsave(outname, [Map2DI(data[:, i, :, :], times[i], x, y, bar_name, exp_names, levels, contours[:, i, :, :], con_levels, cmap, log_scale, fig_size, fontsize, base=base, ltresh=ltresh, lscale=lscale, subs=subs, set_ax=set_ax, vis=vis)
+                              for i in range(len(times))], fps=FPS)
+    else:
+        imageio.mimsave(outname, [Map2DI(data[:, i, :, :], times[i], x, y, bar_name, exp_names, levels, [], con_levels, cmap, log_scale, fig_size, fontsize, base=base, ltresh=ltresh, lscale=lscale, subs=subs, set_ax=set_ax, vis=vis)
                               for i in range(len(times))], fps=FPS)
     plt.close()

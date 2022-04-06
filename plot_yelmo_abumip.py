@@ -20,23 +20,26 @@ locsources = '/home/sergio/entra/ice_data/sources/ABUMIP_shades/'
 locbasins = '/home/sergio/entra/ice_data/Antarctica/ANT-32KM/ANT-32KM_BASINS-nasa.nc'
 
 # Switches (set to 1 what you want to pplot)
-sVAF = 1
-sHCHANGE = 1
-sZSRF = 1
-sUXY = 1
-sGIFS, szgif, shgif, sugif, sGLBMBGIF = 1, 0, 0, 0, 0
+sVAF = 0
+sHCHANGE = 0
+sZSRF = 0
+sUXY = 0
+sGL = 1
+sGIFS, szgif, shgif, sugif, sGLBMBGIF, sTAUDgif, sTAUBgif, sdifTAUgif = 0, 0, 0, 0, 0, 0, 0, 0
 sGIFS3D, zgif3D, hgif3D = 0, 0, 0   # only one at a time
 
 # Experiment
-locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/bmb-fmb_yelmo-v1.75/'    #  abumip_yelmo-v1.75 abuk_02_yelmo-v1.75 abum_03_yelmo-v1.75 abum_04_yelmo-v1.75 abum_05_yelmo-v1.75 abuc_02_yelmo-v1.75 dtt-eps_yelmo-v1.75
-experiments = ['abum_fcmp_fmb0.0', 'abum_pmp_fmb0.0', 'abum_nmp_fmb0.0',
-               'abum_fcmp_fmb1.0', 'abum_pmp_fmb1.0', 'abum_nmp_fmb1.0',
-               'abum_fcmp_fmb10.0', 'abum_pmp_fmb10.0', 'abum_nmp_fmb10.0'] #['fcmp_dtt3.0', 'pmp_dtt3.0', 'nmp_dtt3.0'] # ['fcmp', 'pmp', 'nmp'] # ['dtt3.0'] # ['abuc','abuk','abum']
+locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/bmb-taud_lim_yelmo-v1.75/' #bmb-fmb_yelmo-v1.75/'    #  abumip_yelmo-v1.75 abuk_02_yelmo-v1.75 abum_03_yelmo-v1.75 abum_04_yelmo-v1.75 abum_05_yelmo-v1.75 abuc_02_yelmo-v1.75 dtt-eps_yelmo-v1.75
+experiments = ['abum_fcmp_fmb0.0_taudl30000.0', 'abum_pmp_fmb0.0_taudl30000.0', 'abum_nmp_fmb0.0_taudl30000.0',
+                'abum_fcmp_fmb0.0_taudl300000.0', 'abum_pmp_fmb0.0_taudl300000.0', 'abum_nmp_fmb0.0_taudl300000.0',
+                'abum_fcmp_fmb0.0_taudl3000000.0', 'abum_pmp_fmb0.0_taudl3000000.0', 'abum_nmp_fmb0.0_taudl3000000.0']
+               #'abum_fcmp_fmb1.0', 'abum_pmp_fmb1.0', 'abum_nmp_fmb1.0',
+               #'abum_fcmp_fmb10.0', 'abum_pmp_fmb10.0', 'abum_nmp_fmb10.0'] #['fcmp_dtt3.0', 'pmp_dtt3.0', 'nmp_dtt3.0'] # ['fcmp', 'pmp', 'nmp'] # ['dtt3.0'] # ['abuc','abuk','abum']
 control_run = None  # 'abuc_01'  # set to None if needed
-out_fldr = '/bmb-fmb_32KM/' # '/abuk_02-marine_32KM/' # '/abumip_01_32KM/'
+out_fldr = '/bmb-taudl_32KM/' # '/abuk_02-marine_32KM/' # '/abumip_01_32KM/'
 
 # PLOTTING
-plot_name = 'yelmo_abum_bmb-fmb-32KM.png' #'yelmo_abum_03-32KM.png', 'yelmo_abum_03-32KM.gif', 'yelmo_abum_03-32KM_3D.gif' # 'yelmo_abuk-marine_02_dtt3.0-32KM.png', 'yelmo_abuk-marine_02_dtt3.0-32KM.gif', 'yelmo_abuk-marine_02_dtt3.0-32KM_3D.gif' # 'yelmo_abumip_01-32KM.png', 'yelmo_abumip_01-32KM.gif', 'yelmo_abumip_01-32KM_3D.gif' 
+plot_name = 'yelmo_abum_bmb-taudl-32KM.png' #'yelmo_abum_03-32KM.png', 'yelmo_abum_03-32KM.gif', 'yelmo_abum_03-32KM_3D.gif' # 'yelmo_abuk-marine_02_dtt3.0-32KM.png', 'yelmo_abuk-marine_02_dtt3.0-32KM.gif', 'yelmo_abuk-marine_02_dtt3.0-32KM_3D.gif' # 'yelmo_abumip_01-32KM.png', 'yelmo_abumip_01-32KM.gif', 'yelmo_abumip_01-32KM_3D.gif' 
 shades1D = [0, 0, 1]    # abuc, abuk, abum | from Sun et al., 2020
 color = 3*['orange', 'navy', 'green']
 linestyles = ['solid', 'solid', 'solid', 'dashed', 'dashed', 'dashed', 'dotted', 'dotted', 'dotted']
@@ -50,6 +53,9 @@ units1D = 'yr'
 vaf_lim = [[20, 65],[-2.5, 35]] # VAF fig limits
 
 set_ax = 'Off'  # Do you want to draw axis?
+
+# Levels
+taud_lvls, taub_lvls, diftau_lvls = np.arange(0, 300 + 10, 10), np.arange(0, 300 + 10, 10), np.arange(-20, 20 + 1, 1)
 
 # GIFs
 FPS = 1.5
@@ -92,13 +98,15 @@ gif_name, gif3_name = plot_name[:-4]+'.gif', plot_name[:-3]+'3D.gif'
 if n > 3:
     if sGIFS == 1:
         if szgif + shgif +sugif > 1:
-            print('Too many gifs, it consumes a lot \n Setting all of them to 0 ... \n Change this values and rerun')
+            print('Too many gifs, it consumes a lot \n Setting all of them to 0 ... \n Change these values and rerun')
             sGIFS = 0
     if sGIFS3D == 1:
         if zgif3D + hgif3D > 1:
-            print('Too many 3D gifs, it consumes a lot \n Setting all of them to 0 ... \n Change this values and rerun')
+            print('Too many 3D gifs, it consumes a lot \n Setting all of them to 0 ... \n Change these values and rerun')
             sGIFS3D = 0
 
+
+# Initialize arrays
 if sVAF == 1:
     print('*** VAF and SLR ***')
     shades = np.empty((3, 2, 2, 51))
@@ -129,6 +137,10 @@ if sUXY == 1:
     print('*** uxy_s ***')
     uxy_s = ma.empty((n, lenx, leny))
     umask_bed = ma.empty((n, lenx, leny))
+if sGL == 1:
+    print('*** GL at the beginning and at the end ***')
+    gl = ma.empty((n, 2, lenx, leny)) # at the beginning and at the end
+
 if sGIFS == 1:
     print('*** making gifs ... (time consuming) ***')
     zmask_bed_gif = ma.empty((n, len(time2D), lenx, leny))
@@ -141,6 +153,12 @@ if sGIFS == 1:
     if sGLBMBGIF == 1:
         gl_gif = ma.empty((n, len(time2D), lenx, leny))
         bmb_gif = ma.empty((n, len(time2D), lenx, leny))
+    if sTAUDgif == 1:
+        taud_gif = ma.empty((n, len(time2D), lenx, leny))
+    if sTAUBgif == 1:
+        taub_gif = ma.empty((n, len(time2D), lenx, leny))
+    if sdifTAUgif == 1:
+        diftau_gif = ma.empty((n, len(time2D), lenx, leny))
 
 if sGIFS3D == 1:
     print('*** making gifs 3D ... (very time consuming) ***')
@@ -154,6 +172,9 @@ if sGIFS3D == 1:
 # ---- Calcs
 for i in range(n):
     if sVAF == 1:
+        if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
+            VAFdata[i,:], dVAFdata[i,:] = np.NaN, np.NaN
+            continue
         datan = yf.LoadYelmo1D(experiments[i], 'V_sl', locdata)
         if control_run != None:
             ref = yf.LoadYelmo1D(control_run, 'V_sl', locdata)
@@ -164,6 +185,9 @@ for i in range(n):
         VAFdata[i, :], dVAFdata[i, :] = vaf, dvaf
 
     if sHCHANGE == 1:
+        if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
+            H_change[i, :, :], hmask_bed[i, :, :] = np.NaN, np.NaN
+            continue
         H_grnd, xc, yc = yf.LoadYelmo3D(
             experiments[i], 'H_grnd', locdata, time=[0, -1])
         basins, xc, yc = yf.LoadYelmo2D(experiments[i], 'basins', locdata)
@@ -197,6 +221,9 @@ for i in range(n):
                         str(Hbas_change[i, 0, k])+' m SLE' + '\n')
 
     if sZSRF == 1:
+        if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
+            z_srf[i, :, :], zmask_bed[i, :, :] = np.NaN, np.NaN
+            continue
         zsrf, xc, yc = yf.LoadYelmo3D(
             experiments[i], 'z_srf', locdata, time=-1)
         maskbed, xc, yc = yf.LoadYelmo3D(
@@ -211,6 +238,9 @@ for i in range(n):
         z_srf[i, :, :], zmask_bed[i, :, :] = zsrf/1000, maskbed
 
     if sUXY == 1:
+        if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
+            uxy_s[i, :, :], umask_bed[i, :, :] = np.NaN, np.NaN
+            continue
         uxys, xc, yc = yf.LoadYelmo3D(
             experiments[i], 'uxy_s', locdata, time=-1)
         maskbed, xc, yc = yf.LoadYelmo3D(
@@ -223,14 +253,23 @@ for i in range(n):
 
         uxys = ma.masked_where(maskbed == 0, uxys)
         uxy_s[i, :, :], umask_bed[i, :, :] = uxys, maskbed
-
-
+    if sGL == 1:
+        if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
+            gl[i, :, :, :] = np.NaN
+            continue
+        gl[i, :, :, :], xc, yc = yf.LoadYelmo3D(experiments[i], 'mask_bed', locdata, time=[1, -1])
+        
     if sGIFS == 1:
-        maskbedgif, xc, yc = yf.LoadYelmo3D(
-                experiments[i], 'mask_bed', locdata)
-        zmask_bed_gif[i, :, :, :] = maskbedgif
+        if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
+            zmask_bed_gif[i, :, :, :] = np.NaN
+        else:
+            maskbedgif, xc, yc = yf.LoadYelmo3D(experiments[i], 'mask_bed', locdata)
+            zmask_bed_gif[i, :, :, :] = maskbedgif
 
         if szgif == 1:
+            if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
+                z_srf_gif[i, :, :, :] = np.NaN
+                continue
             z_gif, xc, yc = yf.LoadYelmo3D(
                 experiments[i], 'z_srf', locdata)
 
@@ -243,6 +282,9 @@ for i in range(n):
             z_gif = ma.masked_where(maskbedgif == 0, z_gif)
             z_srf_gif[i, :, :, :] = z_gif/1000
         if shgif == 1:
+            if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
+                H_grnd_gif[i, :, :, :] = np.NaN
+                continue
             Hgif, xc, yc = yf.LoadYelmo3D(experiments[i], 'H_grnd',  locdata)
 
             if control_run != None:
@@ -253,6 +295,9 @@ for i in range(n):
             Hgif = ma.masked_where(maskbedgif == 0, Hgif)
             H_grnd_gif[i, :, :, :] = Hgif
         if sugif == 1:
+            if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
+                uxy_s_gif[i, :, :, :] = np.NaN
+                continue
             u_gif, xc, yc = yf.LoadYelmo3D(experiments[i], 'uxy_s', locdata)
 
             if control_run != None:
@@ -263,15 +308,45 @@ for i in range(n):
             u_gif = ma.masked_where(maskbedgif == 0, u_gif)
             uxy_s_gif[i, :, :, :] = u_gif
         if sGLBMBGIF == 1:
+            if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
+                gl_gif[i, :, :, :], bmb_gif[i, :, :, :] = np.NaN, np.NaN
+                continue
             gl_gif[i, :, :, :], xc, yc = yf.LoadYelmo3D(experiments[i], 'dist_grline', locdata)
             bmb_gif[i, :, :, :], xc, yc = yf.LoadYelmo3D(experiments[i], 'bmb', locdata)
+        if sTAUDgif == 1:
+            if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
+                taud_gif[i, :, :, :] = np.NaN
+                continue
+            taud_gif[i, :, :, :], xc, yc = yf.LoadYelmo3D(experiments[i], 'taud', locdata)
+            taud_gif[i, :, :, :] = taud_gif[i, :, :, :]/1000
+        if sTAUBgif == 1:
+            if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
+                taub_gif[i, :, :, :] = np.NaN
+                continue
+            taub_gif[i, :, :, :], xc, yc = yf.LoadYelmo3D(experiments[i], 'taub', locdata)
+            taub_gif[i, :, :, :] = taub_gif[i, :, :, :]/1000
+        if sdifTAUgif == 1:
+            if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
+                diftau_gif[i, :, :, :] = np.NaN
+                continue
+            taud, xc, yc = yf.LoadYelmo3D(experiments[i], 'taud', locdata)
+            taud = ma.masked_where(maskbedgif == 0, taud)
+            taub, xc, yc = yf.LoadYelmo3D(experiments[i], 'taub', locdata)
+            taub = ma.masked_where(maskbedgif == 0, taub)
+            diftau_gif[i, :, :, :] = taud/1000 - taub/1000
 
     if sGIFS3D == 1:
-        maskbedgif3, xc, yc = yf.LoadYelmo3D(experiments[i], 'mask_bed', locdata)
-        zmask_bed_gif3[i, :, :, :] = maskbedgif3
+        if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
+            zmask_bed_gif3[i, :, :, :] = np.NaN
+        else:
+            maskbedgif3, xc, yc = yf.LoadYelmo3D(experiments[i], 'mask_bed', locdata)
+            zmask_bed_gif3[i, :, :, :] = maskbedgif3
         
-
         if zgif3D == 1:
+            if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
+                z_srf_gif3[i, :, :, :] = np.NaN
+                continue
+
             z_gif3, xc, yc = yf.LoadYelmo3D(
                     experiments[i], 'z_srf', locdata)
 
@@ -283,6 +358,10 @@ for i in range(n):
             z_gif3 = ma.masked_where(maskbedgif3 == 0, z_gif3)
             z_srf_gif3[i, :, :, :] = z_gif3/1000
         if hgif3D == 1:
+            if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
+                H_grnd_gif3[i, :, :, :] = np.NaN
+                continue
+
             Hgif3, xc, yc = yf.LoadYelmo3D(experiments[i], 'H_grnd',  locdata)
 
             if control_run != None:
@@ -306,6 +385,9 @@ if sZSRF == 1:
 if sUXY == 1:
     ypf.Map2D(uxy_s, xc, yc, r'Ice surface velocity (m/yr)', experiments, [0, 1e4],
               contours=zmask_bed, contours_levels=[1, 4], cmap='cmo.solar_r', log_scale=True, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='uxys-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
+if sGL == 1:
+    ypf.com_contMap2D(gl[:, 0, :, :] == 4.0, gl[:, 1, :, :] == 4.0, xc, yc, experiments, [], 'b', 'r', linewidths=0.5, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='GL-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
+
 
 if sGIFS == 1:
     if szgif == 1:
@@ -325,7 +407,16 @@ if sGIFS == 1:
         step_bmb = 0.1*maxval
         bmblevels = np.arange(bmb_min, bmb_max+step_bmb, step_bmb)
         ygf.map2gif(xc, yc, bmb_gif, r'Total basal mass balance (m/a)',
-                    experiments, time2D, bmblevels, contours=gl_gif, con_levels=[0], cmap='cmo.oxy', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='GLbmb-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
+                    experiments, time2D, bmblevels, contours=[], con_levels=[0], cmap='cmo.phase', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='GLbmb-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
+    if sTAUDgif == 1:
+        ygf.map2gif(xc, yc, taud_gif, r'Driving stress ($10^3$ Pa)',
+                    experiments, time2D, taud_lvls, [], [], cmap='cmo.solar_r', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='taud-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
+    if sTAUBgif == 1:
+        ygf.map2gif(xc, yc, taub_gif, r'Basal stress ($10^3$ Pa)',
+                    experiments, time2D, taub_lvls, [], [], cmap='cmo.solar_r', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='taub-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
+    if sdifTAUgif == 1:
+        ygf.map2gif(xc, yc, diftau_gif, r'Driving stress - Basal stress ($10^3$ Pa)',
+                    experiments, time2D, diftau_lvls, [], [], cmap='cmo.balance', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='diftau-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
 if sGIFS3D == 1:
     if zgif3D == 1:
         ygf.map2gif(xc, yc, z_srf_gif3, r'Ice surface elevation (km)',

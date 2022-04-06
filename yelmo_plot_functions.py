@@ -210,6 +210,71 @@ def Map2D(data, x, y, bar_name, exp_names, levels, contours, contours_levels, cm
     if plotpath != []:
         plt.savefig(plotpath + file_name)
 
+def com_contMap2D(data1, data2, x, y, exp_names, levels, color1, color2, linewidths, fig_size=[], fontsize=20, SHOW=False, plotpath=[], file_name='com_contMap2D.png', set_ax='On'):
+    ''' Plot 2 arrays in contours in n panels \n
+        data.shape = (n, :, :) where n is the number of experiments
+    '''
+    nexps, leny, lenx = np.shape(data1) # size(data1) = size(data2)
+    axes = []
+
+    if fig_size == []:
+        ncols = min(3, nexps)
+        nrows = max(1, math.ceil(nexps/ncols))
+    else:
+        nrows, ncols = fig_size
+    fig = plt.figure(figsize=(7*ncols, 8*nrows))
+
+    for i in range(nexps):
+        ax = fig.add_subplot(nrows, ncols, i+1)
+        title = LatexFormatter(exp_names[i])
+        ax.set_title(r''+title, fontsize=fontsize)
+        ax.grid(linestyle='--')
+        ax.set_xticks(np.arange(-2500, 2500+1000, 1000))
+        ax.set_yticks(np.arange(-2500, 2500+1000, 1000))
+        ax.axis(set_ax)
+        
+        if levels == []:
+            ax.contour(x, y, data1[i, :, :], colors=color1, linewidths=linewidths)
+            ax.contour(x, y, data2[i, :, :], colors=color2, linewidths=linewidths)
+        else:
+            ax.contour(x, y, data1[i, :, :], levels, colors=color1, linewidths=linewidths)
+            ax.contour(x, y, data2[i, :, :], levels, colors=color2, linewidths=linewidths)
+
+        if nrows > 1:
+            if i in np.arange(0, nrows+2*ncols, ncols):
+                ax.set_ylabel(r'yc (km)', fontsize=fontsize)
+            else:
+                ax.set_yticklabels([])
+            if i in np.arange(nexps-ncols, nexps, 1):
+                ax.set_xlabel(r'xc (km)', fontsize=fontsize)
+            else:
+                ax.set_xticklabels([])
+        elif nrows == 1:
+            if i > 0:
+                ax.set_yticklabels([])
+
+        ax.tick_params(axis='x', labelsize=0.8*fontsize)
+        ax.tick_params(axis='y', labelsize=0.8*fontsize)
+        axes.append(ax)
+
+    if nrows == 1:
+        pad = 0.15
+    else:
+        pad = 0.1
+
+    if set_ax == 'Off':
+        pad = 0
+
+    if (nrows == 1) & (ncols == 1):
+        shrink = 1
+    else:
+        shrink = 0.6
+    
+    if SHOW:
+        plt.show()
+
+    if plotpath != []:
+        plt.savefig(plotpath + file_name)
 
 # OLD FUNCTIONS
 def Plot2D(data, x, y, bar_name, exp_names, levels, plotpath, cmap='cmo.ice_r', file_name='file_2Dplot.png', contours=[], contours_levels=[], fig_size=[], fontsize=20):
