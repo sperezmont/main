@@ -12,6 +12,7 @@ Considerations about data dimensions:\n
 """
 
 ################################################
+from cProfile import label
 import math
 import numpy as np
 from numpy import ma
@@ -214,7 +215,7 @@ def Map2D(data, x, y, bar_name, exp_names, levels, contours, contours_levels, cm
     if plotpath != []:
         plt.savefig(plotpath + file_name)
 
-def com_contMap2D(data1, data2, x, y, exp_names, levels, color1, color2, linewidths, fig_size=[], fontsize=20, SHOW=False, plotpath=[], file_name='com_contMap2D.png', set_ax='On'):
+def com_contMap2D(data1, data2, x, y, exp_names, levels, color1, label1, color2, label2, linewidths, fig_size=[], fontsize=20, SHOW=False, plotpath=[], file_name='com_contMap2D.png', set_ax='On'):
     ''' Plot 2 arrays in contours in n panels \n
         data.shape = (n, :, :) where n is the number of experiments
     '''
@@ -227,6 +228,8 @@ def com_contMap2D(data1, data2, x, y, exp_names, levels, color1, color2, linewid
     else:
         nrows, ncols = fig_size
     fig = plt.figure(figsize=(7*ncols, 8*nrows))
+    fig.text(0.4, 0.95, label1, ha="center", va="bottom", fontsize=fontsize, color=color1)
+    fig.text(0.6, 0.95,label2, ha="center", va="bottom", fontsize=fontsize, color=color2)
 
     for i in range(nexps):
         ax = fig.add_subplot(nrows, ncols, i+1)

@@ -20,33 +20,30 @@ locsources = '/home/sergio/entra/ice_data/sources/ABUMIP_shades/'
 locbasins = '/home/sergio/entra/ice_data/Antarctica/ANT-32KM/ANT-32KM_BASINS-nasa.nc'
 
 # Switches (set to 1 what you want to pplot)
-sVAF = 1
+sVAF = 0
 sHCHANGE = 0
 sZSRF = 0
 sUXY = 0
-sGL = 0
+sGL = 1
 sGIFS, szgif, shgif, sugif, sGLBMBGIF, sTAUDgif, sTAUBgif, sdifTAUgif, sMB = 0, 0, 1, 0, 0, 0, 0, 0, 0
 sGIFS3D, zgif3D, hgif3D = 0, 0, 0   # only one at a time
 
 # Experiment
-locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/bmb-taud_lim_yelmo-v1.75/' #bmb-fmb_yelmo-v1.75/'    #  abumip_yelmo-v1.75 abuk_02_yelmo-v1.75 abum_03_yelmo-v1.75 abum_04_yelmo-v1.75 abum_05_yelmo-v1.75 abuc_02_yelmo-v1.75 dtt-eps_yelmo-v1.75
-experiments = ['abum_fcmp_fmb0.0_taudl30e2', 'abum_pmp_fmb0.0_taudl30e2', 'abum_nmp_fmb0.0_taudl30e2',
-                'abum_fcmp_fmb0.0_taudl30e3', 'abum_pmp_fmb0.0_taudl30e3', 'abum_nmp_fmb0.0_taudl30e3',
-                'abum_fcmp_fmb0.0_taudl30e4', 'abum_pmp_fmb0.0_taudl30e4', 'abum_nmp_fmb0.0_taudl30e4',
-                'abum_fcmp_fmb0.0_taudl30e5', 'abum_pmp_fmb0.0_taudl30e5', 'abum_nmp_fmb0.0_taudl30e5']
-               #'abum_fcmp_fmb1.0', 'abum_pmp_fmb1.0', 'abum_nmp_fmb1.0',
-               #'abum_fcmp_fmb10.0', 'abum_pmp_fmb10.0', 'abum_nmp_fmb10.0'] #['fcmp_dtt3.0', 'pmp_dtt3.0', 'nmp_dtt3.0'] # ['fcmp', 'pmp', 'nmp'] # ['dtt3.0'] # ['abuc','abuk','abum']
+locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/bmb-fmb_yelmo-v1.75/' 
+experiments = ['abum_fcmp_fmb0.0', 'abum_pmp_fmb0.0', 'abum_nmp_fmb0.0',
+               'abum_fcmp_fmb1.0', 'abum_pmp_fmb1.0', 'abum_nmp_fmb1.0',
+               'abum_fcmp_fmb10.0', 'abum_pmp_fmb10.0', 'abum_nmp_fmb10.0'] 
 control_run = None  # 'abuc_01'  # set to None if needed
-out_fldr = '/bmb-taudl_32KM/' # '/abuk_02-marine_32KM/' # '/abumip_01_32KM/'
+out_fldr = '/bmb-fmb_32KM/' # '/abuk_02-marine_32KM/' # '/abumip_01_32KM/'
 
 # PLOTTING
-plot_name = 'yelmo_abum_bmb-taudl-32KM.png' #'yelmo_abum_03-32KM.png', 'yelmo_abum_03-32KM.gif', 'yelmo_abum_03-32KM_3D.gif' # 'yelmo_abuk-marine_02_dtt3.0-32KM.png', 'yelmo_abuk-marine_02_dtt3.0-32KM.gif', 'yelmo_abuk-marine_02_dtt3.0-32KM_3D.gif' # 'yelmo_abumip_01-32KM.png', 'yelmo_abumip_01-32KM.gif', 'yelmo_abumip_01-32KM_3D.gif' 
+plot_name = 'yelmo_abum_bmb-fmb-32KM.png' 
 shades1D = [0, 0, 1]    # abuc, abuk, abum | from Sun et al., 2020
 color = 4*['orange', 'navy', 'green']
 linestyles = ['solid', 'solid', 'solid', 'dashed', 'dashed', 'dashed', 'dotted', 'dotted', 'dotted', 'dashdot', 'dashdot', 'dashdot']
 markers = 12*[None]
 linewidths = [2, 2, 2, 3, 3, 3, 4, 4, 4, 2, 2, 2]#[2, 2, 2, 4, 4, 4, 2, 2, 2]#, 8, 4, 4, 4, 4]
-fig_size = [4, 3]  # nrows, ncols
+fig_size = [3, 3]  # nrows, ncols
 fnt_size1D, fnt_size2D = 28, 30  # 28, 35  # fontsize
 
 xtickslab1D = [0, 100, 200, 300, 400, 500] # [0, 5000, 10000, 15000, 20000, 25000, 30000] # 
@@ -400,7 +397,7 @@ if sUXY == 1:
     ypf.Map2D(uxy_s, xc, yc, r'Ice surface velocity (m/yr)', experiments, [0, 1e4],
               contours=zmask_bed, contours_levels=[1, 4], cmap='cmo.solar_r', log_scale=True, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='uxys-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
 if sGL == 1:
-    ypf.com_contMap2D(gl[:, 0, :, :] == 4.0, gl[:, 1, :, :] == 4.0, xc, yc, experiments, [], 'b', 'r', linewidths=0.5, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='GL-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
+    ypf.com_contMap2D(gl[:, 0, :, :] == 4.0, gl[:, 1, :, :] == 4.0, xc, yc, experiments, [], 'b', 'GL at initial stage', 'r', 'GL at final stage', linewidths=0.5, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='GL-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
 
 
 if sGIFS == 1:

@@ -21,17 +21,23 @@ import cmocean as cmo
 import yelmo_functions as yf
 
 # Variables
-locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/dtt-eps_yelmo-v1.75/'
-plotpath = '/home/sergio/entra/proyects/ABUMIP/proyects/abumip_yelmo-v1.75/dtt-eps_32KM/' 
-plot_name = 'heatmap-SLR_abum-marine-dtt-eps_32KM.png'
+locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/bmb-taud_lim_yelmo-v1.75/'
+plotpath = '/home/sergio/entra/proyects/ABUMIP/proyects/abumip_yelmo-v1.75/bmb-taudl_32KM/' 
+plot_name = 'heatmap-SLR_bmb-taudl_32KM.png'
 
-# size must be len(xaxis_names) * len(yaxis_names), put them as you want to see them in the plot
-exp_names = [['abum-marine_eps0.5_dtt5.0', 'abum-marine_eps1.0_dtt5.0', 'abum-marine_eps2.0_dtt5.0', 'abum-marine_eps3.0_dtt5.0'],
-              ['abum-marine_eps0.5_dtt4.0', 'abum-marine_eps1.0_dtt4.0', 'abum-marine_eps2.0_dtt4.0','abum-marine_eps3.0_dtt4.0'],
-              ['abum-marine_eps0.5_dtt3.0', 'abum-marine_eps1.0_dtt3.0', 'abum-marine_eps2.0_dtt3.0', 'abum-marine_eps3.0_dtt3.0'],
-              ['abum-marine_eps0.5_dtt2.0', 'abum-marine_eps1.0_dtt2.0', 'abum-marine_eps2.0_dtt2.0', 'abum-marine_eps3.0_dtt2.0'],
-              ['abum-marine_eps0.5_dtt1.0', 'abum-marine_eps1.0_dtt1.0', 'abum-marine_eps2.0_dtt1.0', 'abum-marine_eps3.0_dtt1.0'],
-              ['abum-marine_eps0.5_dtt0.5', 'abum-marine_eps1.0_dtt0.5', 'abum-marine_eps2.0_dtt0.5', 'abum-marine_eps3.0_dtt0.5']] 
+# size must be len(xaxis_names) * len(yaxis_names), put them as you want to see them in the plot (as an array)
+exp_names = [['abum_fcmp_fmb0.0_taudl30e5', 'abum_pmp_fmb0.0_taudl30e5', 'abum_nmp_fmb0.0_taudl30e5'],
+                ['abum_fcmp_fmb0.0_taudl30e4', 'abum_pmp_fmb0.0_taudl30e4', 'abum_nmp_fmb0.0_taudl30e4'],
+                ['abum_fcmp_fmb0.0_taudl30e3', 'abum_pmp_fmb0.0_taudl30e3', 'abum_nmp_fmb0.0_taudl30e3'],
+                ['abum_fcmp_fmb0.0_taudl30e2', 'abum_pmp_fmb0.0_taudl30e2', 'abum_nmp_fmb0.0_taudl30e2']]
+
+
+#exp_names = [['abum-marine_eps0.5_dtt5.0', 'abum-marine_eps1.0_dtt5.0', 'abum-marine_eps2.0_dtt5.0', 'abum-marine_eps3.0_dtt5.0'],
+#              ['abum-marine_eps0.5_dtt4.0', 'abum-marine_eps1.0_dtt4.0', 'abum-marine_eps2.0_dtt4.0','abum-marine_eps3.0_dtt4.0'],
+#              ['abum-marine_eps0.5_dtt3.0', 'abum-marine_eps1.0_dtt3.0', 'abum-marine_eps2.0_dtt3.0', 'abum-marine_eps3.0_dtt3.0'],
+#              ['abum-marine_eps0.5_dtt2.0', 'abum-marine_eps1.0_dtt2.0', 'abum-marine_eps2.0_dtt2.0', 'abum-marine_eps3.0_dtt2.0'],
+#              ['abum-marine_eps0.5_dtt1.0', 'abum-marine_eps1.0_dtt1.0', 'abum-marine_eps2.0_dtt1.0', 'abum-marine_eps3.0_dtt1.0'],
+#              ['abum-marine_eps0.5_dtt0.5', 'abum-marine_eps1.0_dtt0.5', 'abum-marine_eps2.0_dtt0.5', 'abum-marine_eps3.0_dtt0.5']] 
 
 var2load = 'V_sle'
 var2plot = 'SLR' # 'SLR'
@@ -39,17 +45,17 @@ var2plot_units = 'm SLE'
 time_index = -1
 yelmo_fname = 'yelmo1D.nc' # default
 
-xaxis_label = 'yelmo.pc_eps'
-xaxis_names = ['0.5', '1.0', '2.0', '3.0']    # as a string
-yaxis_label = 'abumip_proj.dtt'
-yaxis_names = ['0.5', '1.0', '2.0', '3.0', '4.0', '5.0']    # as a string
+xaxis_label = 'ytopo.bmb_gl_method'
+xaxis_names = ['FCMP', 'PMP', 'NMP']    # as a string
+yaxis_label = 'ydyn.taud_lim'
+yaxis_names = ['3e3', '3e4', '3e5 (default)', '3e6']    # as a string
 
 fontsize = 20
 nrounds = 2
 lab_colors = 'k'
 lab_offset, lab_offset_minor = 0.5, 1
 LatexON = True
-figsize = (8, 8)
+figsize = (10, 8)
 
 # Load Variables
 data_array = np.empty(np.shape(exp_names))
@@ -62,8 +68,8 @@ for i in range(0, len(xaxis_names)):
         elif var2load != var2plot:
             if var2plot == 'SLR':
                 try:
-                    dataij = yf.LoadYelmo(locdata+exp_names[j][i], var2load, time=[0, -1], yelmo_file=yelmo_fname)
-                    data_array[j,i] = dataij[0] - dataij[-1]
+                    dataij = yf.LoadYelmo(locdata+exp_names[j][i], var2load, time=[0, time_index], yelmo_file=yelmo_fname)
+                    data_array[j,i] = dataij[0] - dataij[time_index]
                 except:
                     data_array[j, i] = np.NaN
         else:
