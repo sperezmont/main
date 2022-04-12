@@ -117,7 +117,11 @@ def comPlot1D(data1, data2, name1, units1, name2, units2, time_units, xticks, xt
                          fontsize=fontsize)
         ax[i].tick_params(axis='x', labelsize=0.8*fontsize)
         ax[i].tick_params(axis='y', labelsize=0.8*fontsize)
-    ax2.legend(fontsize=0.8*fontsize)
+    
+    if nexps > 3:
+        ax2.legend(bbox_to_anchor=(1,0.5), fontsize=0.8*fontsize, loc='center left')
+    else:
+        ax2.legend(fontsize=0.8*fontsize)
     
     plt.tight_layout()
     plt.savefig(plotpath + file_name)

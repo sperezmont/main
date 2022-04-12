@@ -20,19 +20,20 @@ locsources = '/home/sergio/entra/ice_data/sources/ABUMIP_shades/'
 locbasins = '/home/sergio/entra/ice_data/Antarctica/ANT-32KM/ANT-32KM_BASINS-nasa.nc'
 
 # Switches (set to 1 what you want to pplot)
-sVAF = 0
+sVAF = 1
 sHCHANGE = 0
 sZSRF = 0
 sUXY = 0
-sGL = 1
-sGIFS, szgif, shgif, sugif, sGLBMBGIF, sTAUDgif, sTAUBgif, sdifTAUgif = 0, 0, 0, 0, 0, 0, 0, 0
+sGL = 0
+sGIFS, szgif, shgif, sugif, sGLBMBGIF, sTAUDgif, sTAUBgif, sdifTAUgif, sMB = 0, 0, 1, 0, 0, 0, 0, 0, 0
 sGIFS3D, zgif3D, hgif3D = 0, 0, 0   # only one at a time
 
 # Experiment
 locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/bmb-taud_lim_yelmo-v1.75/' #bmb-fmb_yelmo-v1.75/'    #  abumip_yelmo-v1.75 abuk_02_yelmo-v1.75 abum_03_yelmo-v1.75 abum_04_yelmo-v1.75 abum_05_yelmo-v1.75 abuc_02_yelmo-v1.75 dtt-eps_yelmo-v1.75
-experiments = ['abum_fcmp_fmb0.0_taudl30000.0', 'abum_pmp_fmb0.0_taudl30000.0', 'abum_nmp_fmb0.0_taudl30000.0',
-                'abum_fcmp_fmb0.0_taudl300000.0', 'abum_pmp_fmb0.0_taudl300000.0', 'abum_nmp_fmb0.0_taudl300000.0',
-                'abum_fcmp_fmb0.0_taudl3000000.0', 'abum_pmp_fmb0.0_taudl3000000.0', 'abum_nmp_fmb0.0_taudl3000000.0']
+experiments = ['abum_fcmp_fmb0.0_taudl30e2', 'abum_pmp_fmb0.0_taudl30e2', 'abum_nmp_fmb0.0_taudl30e2',
+                'abum_fcmp_fmb0.0_taudl30e3', 'abum_pmp_fmb0.0_taudl30e3', 'abum_nmp_fmb0.0_taudl30e3',
+                'abum_fcmp_fmb0.0_taudl30e4', 'abum_pmp_fmb0.0_taudl30e4', 'abum_nmp_fmb0.0_taudl30e4',
+                'abum_fcmp_fmb0.0_taudl30e5', 'abum_pmp_fmb0.0_taudl30e5', 'abum_nmp_fmb0.0_taudl30e5']
                #'abum_fcmp_fmb1.0', 'abum_pmp_fmb1.0', 'abum_nmp_fmb1.0',
                #'abum_fcmp_fmb10.0', 'abum_pmp_fmb10.0', 'abum_nmp_fmb10.0'] #['fcmp_dtt3.0', 'pmp_dtt3.0', 'nmp_dtt3.0'] # ['fcmp', 'pmp', 'nmp'] # ['dtt3.0'] # ['abuc','abuk','abum']
 control_run = None  # 'abuc_01'  # set to None if needed
@@ -41,21 +42,22 @@ out_fldr = '/bmb-taudl_32KM/' # '/abuk_02-marine_32KM/' # '/abumip_01_32KM/'
 # PLOTTING
 plot_name = 'yelmo_abum_bmb-taudl-32KM.png' #'yelmo_abum_03-32KM.png', 'yelmo_abum_03-32KM.gif', 'yelmo_abum_03-32KM_3D.gif' # 'yelmo_abuk-marine_02_dtt3.0-32KM.png', 'yelmo_abuk-marine_02_dtt3.0-32KM.gif', 'yelmo_abuk-marine_02_dtt3.0-32KM_3D.gif' # 'yelmo_abumip_01-32KM.png', 'yelmo_abumip_01-32KM.gif', 'yelmo_abumip_01-32KM_3D.gif' 
 shades1D = [0, 0, 1]    # abuc, abuk, abum | from Sun et al., 2020
-color = 3*['orange', 'navy', 'green']
-linestyles = ['solid', 'solid', 'solid', 'dashed', 'dashed', 'dashed', 'dotted', 'dotted', 'dotted']
-markers = 9*[None]
-linewidths = [2, 2, 2, 3, 3, 3, 4, 4, 4]#[2, 2, 2, 4, 4, 4, 2, 2, 2]#, 8, 4, 4, 4, 4]
-fig_size = [3, 3]  # nrows, ncols
+color = 4*['orange', 'navy', 'green']
+linestyles = ['solid', 'solid', 'solid', 'dashed', 'dashed', 'dashed', 'dotted', 'dotted', 'dotted', 'dashdot', 'dashdot', 'dashdot']
+markers = 12*[None]
+linewidths = [2, 2, 2, 3, 3, 3, 4, 4, 4, 2, 2, 2]#[2, 2, 2, 4, 4, 4, 2, 2, 2]#, 8, 4, 4, 4, 4]
+fig_size = [4, 3]  # nrows, ncols
 fnt_size1D, fnt_size2D = 28, 30  # 28, 35  # fontsize
 
 xtickslab1D = [0, 100, 200, 300, 400, 500] # [0, 5000, 10000, 15000, 20000, 25000, 30000] # 
 units1D = 'yr'
-vaf_lim = [[20, 65],[-2.5, 35]] # VAF fig limits
+vaf_lim = [[35, 63],[-4, 20]]#[[20, 65],[-2.5, 35]] # VAF fig limits
 
 set_ax = 'Off'  # Do you want to draw axis?
 
 # Levels
 taud_lvls, taub_lvls, diftau_lvls = np.arange(0, 300 + 10, 10), np.arange(0, 300 + 10, 10), np.arange(-20, 20 + 1, 1)
+mb_lvls = np.arange(-400, 5+50, 50)
 
 # GIFs
 FPS = 1.5
@@ -159,6 +161,8 @@ if sGIFS == 1:
         taub_gif = ma.empty((n, len(time2D), lenx, leny))
     if sdifTAUgif == 1:
         diftau_gif = ma.empty((n, len(time2D), lenx, leny))
+    if sMB == 1:
+        MB_gif = ma.empty((n, len(time2D), lenx, leny))
 
 if sGIFS3D == 1:
     print('*** making gifs 3D ... (very time consuming) ***')
@@ -334,6 +338,16 @@ for i in range(n):
             taub, xc, yc = yf.LoadYelmo3D(experiments[i], 'taub', locdata)
             taub = ma.masked_where(maskbedgif == 0, taub)
             diftau_gif[i, :, :, :] = taud/1000 - taub/1000
+        if sMB == 1:
+            if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
+                MB_gif[i, :, :, :] = np.NaN
+                continue
+            smb, xc, yc = yf.LoadYelmo3D(experiments[i], 'smb', locdata)
+            bmb_g, xc, yc = yf.LoadYelmo3D(experiments[i], 'bmb_grnd', locdata)
+            bmb_s, xc, yc = yf.LoadYelmo3D(experiments[i], 'bmb_shlf', locdata)
+            calv, xc, yc = yf.LoadYelmo3D(experiments[i], 'calv', locdata)
+
+            MB_gif[i, :, :, :] = smb + bmb_g + bmb_s + calv
 
     if sGIFS3D == 1:
         if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
@@ -417,6 +431,10 @@ if sGIFS == 1:
     if sdifTAUgif == 1:
         ygf.map2gif(xc, yc, diftau_gif, r'Driving stress - Basal stress ($10^3$ Pa)',
                     experiments, time2D, diftau_lvls, [], [], cmap='cmo.balance', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='diftau-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
+    if sMB == 1:
+        ygf.map2gif(xc, yc, MB_gif, r'Total mass balance (m/a)',
+                    experiments, time2D, mb_lvls, contours=[], con_levels=[0], cmap='cmo.thermal', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='MB-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
+
 if sGIFS3D == 1:
     if zgif3D == 1:
         ygf.map2gif(xc, yc, z_srf_gif3, r'Ice surface elevation (km)',
