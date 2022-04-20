@@ -21,34 +21,33 @@ locbasins = '/home/sergio/entra/ice_data/Antarctica/ANT-32KM/ANT-32KM_BASINS-nas
 
 # Switches (set to 1 what you want to pplot)
 sVAF = 0
-sHCHANGE = 0
-sZSRF = 0
-sUXY = 0
-sGL = 1
-sGIFS, szgif, shgif, sugif, sGLBMBGIF, sTAUDgif, sTAUBgif, sdifTAUgif, sMB = 0, 0, 1, 0, 0, 0, 0, 0, 0
+sHCHANGE = 1
+sZSRF = 1
+sUXY = 1
+sGL = 0
+sGIFS, szgif, shgif, sugif, sGLBMBGIF, sTAUDgif, sTAUBgif, sdifTAUgif, sMB = 0, 0, 0, 0, 0, 0, 0, 0, 0
 sGIFS3D, zgif3D, hgif3D = 0, 0, 0   # only one at a time
 
 # Experiment
-locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/bmb-fmb_yelmo-v1.75/' 
-experiments = ['abum_fcmp_fmb0.0', 'abum_pmp_fmb0.0', 'abum_nmp_fmb0.0',
-               'abum_fcmp_fmb1.0', 'abum_pmp_fmb1.0', 'abum_nmp_fmb1.0',
-               'abum_fcmp_fmb10.0', 'abum_pmp_fmb10.0', 'abum_nmp_fmb10.0'] 
+locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/sliding_yelmo-v1.75/' 
+experiments = ['abuc_meth3_betaq0.0', 'abuc_meth3_betaq0.2', 'abuc_meth3_betaq0.5', 'abuc_meth3_betaq1.0',
+                'abum_meth3_betaq0.0', 'abum_meth3_betaq0.2', 'abum_meth3_betaq0.5', 'abum_meth3_betaq1.0'] 
 control_run = None  # 'abuc_01'  # set to None if needed
-out_fldr = '/bmb-fmb_32KM/' # '/abuk_02-marine_32KM/' # '/abumip_01_32KM/'
+out_fldr = '/sliding_32KM/' # '/abuk_02-marine_32KM/' # '/abumip_01_32KM/'
 
 # PLOTTING
-plot_name = 'yelmo_abum_bmb-fmb-32KM.png' 
-shades1D = [0, 0, 1]    # abuc, abuk, abum | from Sun et al., 2020
-color = 4*['orange', 'navy', 'green']
-linestyles = ['solid', 'solid', 'solid', 'dashed', 'dashed', 'dashed', 'dotted', 'dotted', 'dotted', 'dashdot', 'dashdot', 'dashdot']
+plot_name = 'yelmo_sliding-32KM.png' 
+shades1D = [1, 0, 1]    # abuc, abuk, abum | from Sun et al., 2020
+color = 2*['red', 'k', 'grey', 'blue']
+linestyles = ['dashed', 'dashed', 'dashed', 'dashed', 'solid', 'solid', 'solid', 'solid']
 markers = 12*[None]
-linewidths = [2, 2, 2, 3, 3, 3, 4, 4, 4, 2, 2, 2]#[2, 2, 2, 4, 4, 4, 2, 2, 2]#, 8, 4, 4, 4, 4]
-fig_size = [3, 3]  # nrows, ncols
+linewidths = 2*[3, 3, 3, 3]
+fig_size = [2, 4]  # nrows, ncols
 fnt_size1D, fnt_size2D = 28, 30  # 28, 35  # fontsize
 
-xtickslab1D = [0, 100, 200, 300, 400, 500] # [0, 5000, 10000, 15000, 20000, 25000, 30000] # 
+xtickslab1D = [0, 100, 200, 300, 400, 500] # [0, 5000, 10000, 15000, 20000, 25000, 30000] # [0, 100, 200, 300, 400, 500]
 units1D = 'yr'
-vaf_lim = [[35, 63],[-4, 20]]#[[20, 65],[-2.5, 35]] # VAF fig limits
+vaf_lim = [[30, 63],[-4, 25]]#[[20, 65],[-2.5, 35]] # [[55.5, 58], [-1.5,1]] # VAF fig limits
 
 set_ax = 'Off'  # Do you want to draw axis?
 
@@ -398,7 +397,6 @@ if sUXY == 1:
               contours=zmask_bed, contours_levels=[1, 4], cmap='cmo.solar_r', log_scale=True, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='uxys-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
 if sGL == 1:
     ypf.com_contMap2D(gl[:, 0, :, :] == 4.0, gl[:, 1, :, :] == 4.0, xc, yc, experiments, [], 'b', 'GL at initial stage', 'r', 'GL at final stage', linewidths=0.5, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='GL-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
-
 
 if sGIFS == 1:
     if szgif == 1:
