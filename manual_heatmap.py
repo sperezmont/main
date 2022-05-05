@@ -21,14 +21,13 @@ import cmocean as cmo
 import yelmo_functions as yf
 
 # Variables
-locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/'
-plotpath = '/home/sergio/entra/proyects/ABUMIP/proyects/abumip_yelmo-v1.75/sliding_32KM/' 
+locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/bmb-sliding-fmb_yelmo-v1.75/'
+plotpath = '/home/sergio/entra/proyects/ABUMIP/proyects/abumip_yelmo-v1.75/bmb-sliding-fmb_32KM/' 
 
 # size must be len(xaxis_names) * len(yaxis_names), put them as you want to see them in the plot (as an array)
-exp_names = [['sliding_restart_yelmo-v1.75/beta_q0.0', 'sliding_restart_yelmo-v1.75/beta_q0.2', 'sliding_restart_yelmo-v1.75/beta_q0.5', 'sliding_restart_yelmo-v1.75/beta_q1.0'],
-                ['sliding_yelmo-v1.75/abuc_meth3_betaq0.0', 'sliding_yelmo-v1.75/abuc_meth3_betaq0.2', 'sliding_yelmo-v1.75/abuc_meth3_betaq0.5', 'sliding_yelmo-v1.75/abuc_meth3_betaq1.0'],
-                ['sliding_yelmo-v1.75/abum_meth3_betaq0.0', 'sliding_yelmo-v1.75/abum_meth3_betaq0.2', 'sliding_yelmo-v1.75/abum_meth3_betaq0.5', 'sliding_yelmo-v1.75/abum_meth3_betaq1.0']]
-
+exp_names = [['abum_pmp-m2q0.0f0.0', 'abum_pmp-m3q0.0f0.0', 'abum_pmp-m2q0.2f0.0', 'abum_pmp-m3q0.2f0.0', 'abum_pmp-m2q0.5f0.0', 'abum_pmp-m3q0.5f0.0', 'abum_pmp-m2q1.0f0.0', 'abum_pmp-m3q1.0f0.0'],
+             ['abum_fcmp-m2q0.0f0.0', 'abum_fcmp-m3q0.0f0.0', 'abum_fcmp-m2q0.2f0.0', 'abum_fcmp-m3q0.2f0.0', 'abum_fcmp-m2q0.5f0.0', 'abum_fcmp-m3q0.5f0.0', 'abum_fcmp-m2q1.0f0.0', 'abum_fcmp-m3q1.0f0.0'],
+             ['abum_nmp-m2q0.0f0.0', 'abum_nmp-m3q0.0f0.0', 'abum_nmp-m2q0.2f0.0', 'abum_nmp-m3q0.2f0.0', 'abum_nmp-m2q0.5f0.0', 'abum_nmp-m3q0.5f0.0', 'abum_nmp-m2q1.0f0.0', 'abum_nmp-m3q1.0f0.0']]
 
 #exp_names = [['abum-marine_eps0.5_dtt5.0', 'abum-marine_eps1.0_dtt5.0', 'abum-marine_eps2.0_dtt5.0', 'abum-marine_eps3.0_dtt5.0'],
 #              ['abum-marine_eps0.5_dtt4.0', 'abum-marine_eps1.0_dtt4.0', 'abum-marine_eps2.0_dtt4.0','abum-marine_eps3.0_dtt4.0'],
@@ -38,27 +37,54 @@ exp_names = [['sliding_restart_yelmo-v1.75/beta_q0.0', 'sliding_restart_yelmo-v1
 #              ['abum-marine_eps0.5_dtt0.5', 'abum-marine_eps1.0_dtt0.5', 'abum-marine_eps2.0_dtt0.5', 'abum-marine_eps3.0_dtt0.5']] 
 
 var2load = 'V_sle'
-var2plot = 'V' # 'SLR' 'V'
-plot_name = 'heatmap-{}_sliding_32KM.png'.format(var2plot)
+var2plot = 'SLR' # 'SLR' 'V'
+varlims = []
+plot_name = 'heatmap-{}_bmb-sliding-fmb-abumf0.0_32KM.png'.format(var2plot)
 var2plot_units = 'm SLE'
 time_index = -1
 yelmo_fname = 'yelmo1D.nc' # default
 
-xaxis_label = 'ydyn.beta_q'
-xaxis_names = ['0.0', '0.2', '0.5', '1.0']    # as a string
-yaxis_label = 'Experiment'
-yaxis_names = ['ABUM-floating (500 yrs)', 'ABUC (500 yrs)', 'Spin-Up (3e4 yrs)']    # as a string
+# y1
+yaxis_label = 'ytopo.bmb_gl_method'
+yaxis_loc = [0.5, 1.5, 2.5]
+yaxis_names = ['nmp', 'fcmp', 'pmp']    # as a string
+ylimits_cell = np.arange(1, 4, 1)
 
-fontsize = 20
+# y2
+y2axis_on = False
+y2axis_label = 'ytopo.fmb_scale'
+y2axis_loc = [0.5, 1.5, 2.5]
+y2axis_names = ['0.0', '0.5', '1.0', '10.0']    # as a string
+y2limits_cell = np.arange(0.5, 4.5, 1)
+
+# x1
+xaxis_label = 'ydyn.beta_q'
+xaxis_loc = [0.5, 1.5, 2.5, 3.5]
+xaxis_names =  ['0.0', '0.2', '0.5', '1.0']   # as a string
+xlimits_cell = np.arange(1, 4, 1)
+
+# x2
+x2axis_on = True
+x2axis_label = 'ydyn.beta_method'
+x2axis_loc = [0.25, 0.75, 1.25, 1.75, 2.25, 2.75, 3.25, 3.75]
+x2axis_names = 4*['P', 'C']
+x2limits_cell = np.arange(0.5, 4.5, 1)
+
+fontsize = 25
 nrounds = 2
-lab_colors = 'w'
-lab_offset, lab_offset_minor = 0.5, 1
+lab_colors = 'lime'
+lab_offset, lab_offset_minor = 0.25, 0.5
+xoffset, yoffset = 2, 1
 LatexON = True
 figsize = (12, 8)
+pad=0.009 
+shrink=0.8
 
 # Load Variables
 data_array = np.empty(np.shape(exp_names))
-exp_names.reverse()
+
+if os.path.isdir(plotpath) == False:
+    os.mkdir(plotpath)
 
 for i in range(0, len(xaxis_names)):
     for j in range(0, len(yaxis_names)):
@@ -90,38 +116,61 @@ if LatexON:
     plt.rcParams['font.serif'] = ['Times New Roman']
     rc('text', usetex=True)
 
-vmin, vmax = np.nanmin(data_array), np.nanmax(data_array)
+if varlims == []:
+    vmin, vmax = np.nanmin(data_array), np.nanmax(data_array)
+else:
+    vmin, vmax = varlims
 
-if var2plot in ['SLR']:
+if var2plot in ['SLR', 'V']:
     if var2plot == 'SLR':
-        colormap = 'cmo.deep'
+        colormap = 'cmo.thermal'
+    elif var2plot == 'V':
+        colormap = 'nipy_spectral'
 else:
     colormap = 'jet'
 
 fig, ax = plt.subplots(figsize=figsize)
 
-im = plt.imshow(np.flip(data_array, axis=0), cmap=colormap, vmin=vmin, vmax=vmax, extent=[0, len(xaxis_names), 0, len(yaxis_names)])
-cb = plt.colorbar(im)
-
-ax.set_title(var2plot, fontsize=fontsize)
+im = plt.imshow(data_array, cmap=colormap, vmin=vmin, vmax=vmax, origin='upper',
+                 extent=[0, len(xaxis_names), 0, len(yaxis_names)])
+cb = plt.colorbar(im, pad=pad, shrink=shrink)
 
 cb.ax.tick_params(labelsize=fontsize)
 cb.set_label(label=r''+var2plot+' ('+ var2plot_units +')', size=fontsize)
 
-ax.set_xticks(np.arange(lab_offset, len(xaxis_names)+lab_offset), labels=xaxis_names, fontsize=fontsize)
-ax.set_yticks(np.arange(lab_offset, len(yaxis_names)+lab_offset), labels=yaxis_names, fontsize=fontsize)
-
-ax.set_xticks(np.arange(0, len(xaxis_names)+lab_offset_minor), minor=True)
-ax.set_yticks(np.arange(0, len(yaxis_names)+lab_offset_minor), minor=True)
-
-ax.set_xlabel(xaxis_label, fontsize=fontsize)
+# y1
+ax.set_yticks(yaxis_loc, fontsize=fontsize)
+ax.set_yticklabels(yaxis_names, fontsize=fontsize)
 ax.set_ylabel(yaxis_label, fontsize=fontsize)
+for i in ylimits_cell:
+    plt.axhline(y=i, color='k', linestyle='-', linewidth=2)
 
-for i in range(len(xaxis_names)):
-    for j in range(len(yaxis_names)):
-        text = ax.text(i+lab_offset, j+lab_offset, round(data_array[j, i], nrounds), color=lab_colors, fontsize=fontsize, ha="center", va="center")
+# y2
+if y2axis_on:
+    ax2 = ax.secondary_yaxis('right') # ax.twiny()
+    ax2.set_ylim(ax.get_ylim())
+    ax2.set_yticks(y2axis_loc)
+    ax2.set_yticklabels(y2axis_names, fontsize=fontsize)
+    ax2.set_ylabel(y2axis_label, fontsize=fontsize)
+    for i in y2limits_cell:
+        plt.axhline(y=i, color='k', linestyle='dashed', linewidth=1)
+# x1
+ax.set_xticks(xaxis_loc, fontsize=fontsize)
+ax.set_xticklabels(xaxis_names, fontsize=fontsize)
+ax.set_xlabel(xaxis_label, fontsize=fontsize)
+for i in xlimits_cell:
+    plt.axvline(x=i, color='k', linestyle='-', linewidth=2)
 
-ax.grid(which='minor',color='k', linestyle='-', linewidth=2)
+# x2
+if x2axis_on:
+    ax2 = ax.secondary_xaxis('top') # ax.twiny()
+    ax2.set_xlim(ax.get_xlim())
+    ax2.set_xticks(x2axis_loc)
+    ax2.set_xticklabels(x2axis_names, fontsize=fontsize)
+    ax2.set_xlabel(x2axis_label, fontsize=fontsize)
+    for i in x2limits_cell:
+        plt.axvline(x=i, color='k', linestyle='dotted', linewidth=1)
+
 plt.tight_layout()
 plt.savefig(plotpath + plot_name)
 

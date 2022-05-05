@@ -79,12 +79,12 @@ def Plot1D(data, name, units, time_units, plotpath, shades=[],  labels=['ABUC', 
     plt.savefig(plotpath + file_name)
 
 
-def comPlot1D(data1, data2, name1, units1, name2, units2, time_units, xticks, xtickslab, ylimits, plotpath, shades=[], text=False, labels=['ABUC', 'ABUK', 'ABUM'], color=['blue', 'red', 'orange'], linestyles=['solid', 'solid', 'solid'], markers=[None, None, None], linewidths=[2, 2, 2], file_name='cplot1D.png', fontsize=20):
+def comPlot1D(data1, data2, name1, units1, name2, units2, time_units, xticks, xtickslab, ylimits, plotpath, shades=[], text=False, labels=['ABUC', 'ABUK', 'ABUM'], color=['blue', 'red', 'orange'], linestyles=['solid', 'solid', 'solid'], markers=[None, None, None], linewidths=[2, 2, 2], file_name='cplot1D.png', fontsize=20, fig1D=(18,8)):
     ''' Plots the time series of two 1D variables \n
         data1.shape = nexps, ntimes 
     '''
     nexps, ntimes = np.shape(data1)
-    fig, [ax1, ax2] = plt.subplots(1, 2, figsize=(18, 8))
+    fig, [ax1, ax2] = plt.subplots(1, 2, figsize=fig1D)
     ax, data, names, units = [ax1, ax2], [
         data1, data2], [name1, name2], [units1, units2]
 
