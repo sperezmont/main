@@ -31,26 +31,27 @@ sGIFS3D, zgif3D, hgif3D = 0, 0, 0   # only one at a time
 
 # Experiment
 locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/bmb-sliding-fmb_yelmo-v1.75/' 
-experiments = ['restart_pmp-m2q0.0','restart_pmp-m2q0.2', 'restart_pmp-m2q0.5','restart_pmp-m2q1.0',
-                'restart_fcmp-m2q0.0','restart_fcmp-m2q0.2', 'restart_fcmp-m2q0.5','restart_fcmp-m2q1.0',
-                'restart_nmp-m2q0.0','restart_nmp-m2q0.2', 'restart_nmp-m2q0.5','restart_nmp-m2q1.0',]  
+experiments = ['abuc_pmp-m3q0.5f0.0', 'abuc_pmp-m3q0.5f1.0', 'abuc_pmp-m3q0.5f10.0',
+                'abuc_fcmp-m3q0.5f0.0', 'abuc_fcmp-m3q0.5f1.0', 'abuc_fcmp-m3q0.5f10.0',
+                'abuc_nmp-m3q0.5f0.0', 'abuc_nmp-m3q0.5f1.0', 'abuc_nmp-m3q0.5f10.0']
+exp_names = ['PMP, fc = 0.0', 'PMP, fc = 1.0', 'PMP, fc = 10.0', 'FCMP, fc = 0.0', 'FCMP, fc = 1.0', 'FCMP, fc = 10.0', 'NMP, fc = 0.0', 'NMP, fc = 1.0', 'NMP, fc = 10.0']  
 control_run = None  # 'abuc_01'  # set to None if needed
-out_fldr = '/bmb-sliding-fmb_32KM/' # '/abuk_02-marine_32KM/' # '/abumip_01_32KM/'
-plot_name = 'yelmo_bmb-sliding-fmb-restart-32KM.png' 
+out_fldr = '/bmb-sliding-fmb_32KM/' # '/abuk_02-marine_32KM/' # '/abucip_01_32KM/'
+plot_name = 'yelmo_abuc_bmb-m3q0.5f-32KM.png' 
 
 # PLOTTING
-shades1D = [0, 0, 0]    # abuc, abuk, abum | from Sun et al., 2020
-color = 3*['k', 'b', 'g', 'r']
-linestyles = 4*['solid']+4*['dashed']+4*['dotted']
+shades1D = [1, 0, 0]    # abuc, abuk, abuc | from Sun et al., 2020
+color = 3*['k', 'b', 'r']
+linestyles = 3*['solid'] + 3*['dashed'] + 3*['dotted']
 markers = 32*[None]
-linewidths = 12*[2]
-fig1D = (18, 8)
-fig_size = [3, 4]  # nrows, ncols
+linewidths = 3*[5, 3, 2]
+fig1D = (18, 5)
+fig_size = [3, 3]  # nrows, ncols
 fnt_size1D, fnt_size2D = 28, 30  # 28, 35  # fontsize
 
-xtickslab1D = [0, 5000, 10000, 15000, 20000, 25000, 30000] # [0, 100, 200, 300, 400, 500] # 
+xtickslab1D = [0, 100, 200, 300, 400, 500] # [0, 5000, 10000, 15000, 20000, 25000, 30000]
 units1D = 'yr'
-vaf_lim =[[54, 63], [-2, 1]] #[[20, 65],[-2.5, 35]] # [[30, 63],[-4, 25]] # VAF fig limits
+vaf_lim =[[54, 63],[-2, 1]]#[[55.5, 58], [-2, 1]] # # [[30, 63],[-4, 25]] # VAF fig limits
 
 set_ax = 'Off'  # Do you want to draw axis?
 
@@ -79,6 +80,12 @@ if os.path.isdir(locplot+out_fldr) == False:
 if os.path.isdir(locplot+out_fldr+'/contributions/') == False:
     os.mkdir(locplot+out_fldr+'/contributions')
     print('/contributions/ made and ready')
+
+# -- Labeling
+if exp_names == []:
+    exp_labels = experiments
+else:
+    exp_labels = exp_names
 
 # -- Calculations
 # ---- Initialization
@@ -113,8 +120,8 @@ if sVAF == 1:
     shades = np.empty((3, 2, 2, 51))
     VAFdata, dVAFdata = np.empty((n, lent)), np.empty((n, lent))
     if any(shades1D) != 0:
-        kindlist, varlist, abumip_exps = ['min', 'max'], [
-            'VAF', 'SLR'], ['ABUC', 'ABUK', 'ABUM']
+        kindlist, varlist, abucip_exps = ['min', 'max'], [
+            'VAF', 'SLR'], ['ABUC', 'ABUK', 'abuc']
         data_shades = nc.Dataset(
             locsources + '/ABUMIP_vaf-slr-shades.nc')
     for i in range(3):
@@ -122,14 +129,14 @@ if sVAF == 1:
             for j in range(len(varlist)):
                 for k in range(len(kindlist)):
                     shades[i, j, k, :] = data_shades.variables[kindlist[k] +
-                                                               varlist[j]+' '+abumip_exps[i]][:]
+                                                               varlist[j]+' '+abucip_exps[i]][:]
         else:
             shades[i, :, :, :] = None
 if sHCHANGE == 1:
     print('*** H_change ***')
     H_change, Hreg_change, Hbas_change = ma.empty(
         (n, lenx, leny)), np.empty((n, 3)), np.empty((n, 2, 19))
-    hmask_bed = ma.empty((n, lenx, leny))
+    hmask_bed = ma.empty((n, 2, lenx, leny))
 if sZSRF == 1:
     print('*** z_srf ***')
     z_srf = ma.empty((n, lenx, leny))
@@ -198,7 +205,7 @@ for i in range(n):
             experiments[i], 'H_grnd', locdata, time=[0, -1])
         basins, xc, yc = yf.LoadYelmo2D(experiments[i], 'basins', locdata)
         maskbed, xc, yc = yf.LoadYelmo3D(
-            experiments[i], 'mask_bed', locdata, time=0)
+            experiments[i], 'mask_bed', locdata, time=[0, -1])
 
         if control_run != None:
             ref = yf.LoadYelmo3D(control_run, 'H_grnd', locdata, time=[0, -1])
@@ -206,9 +213,9 @@ for i in range(n):
             H_grnd = H_grnd - drift
         H_change[i, :, :], Hreg_change[i, :], Hbas_change[i,
                                                           :, :] = yf.Hchange(H_grnd, basins=basins, resolution=res, basins_nasa=locbasins)
-        hmask_bed[i, :, :] = maskbed
+        hmask_bed[i, :, :, :] = maskbed
         H_change[i, :, :] = ma.masked_where(
-            hmask_bed[i, :, :] == 0, H_change[i, :, :])
+            hmask_bed[i, 0, :, :] == 0, H_change[i, :, :])
 
         if i == 0:
             print('--> Each contribution is stored with plots')
@@ -397,58 +404,58 @@ for i in range(n):
 
 # -- Plots
 if sVAF == 1:
-    ypf.comPlot1D(VAFdata, dVAFdata, r'VAF', r'm SLE', r'$\Delta$VAF', r'm SLE', units1D, xticks1D, xtickslab1D, vaf_lim, locplot+out_fldr, shades, text=False,
-                  labels=experiments, color=color, linestyles=linestyles, markers=markers, linewidths=linewidths, file_name='vaf-'+plot_name, fontsize=fnt_size1D, fig1D=fig1D)
+    ypf.comPlot1D(VAFdata, dVAFdata, r'VAF', r'm SLE', r'SLR', r'm SLE', units1D, xticks1D, xtickslab1D, vaf_lim, locplot+out_fldr, shades, text=False,
+                  labels=exp_labels, color=color, linestyles=linestyles, markers=markers, linewidths=linewidths, file_name='vaf-'+plot_name, fontsize=fnt_size1D, fig1D=fig1D)
 if sHCHANGE == 1:
-    ypf.Map2D(H_change, xc, yc, r'Grounded Ice thickness Relative change', experiments, np.arange(0, 1.1, 0.1),
-              contours=hmask_bed, contours_levels=[1, 4], cmap='cmo.tempo', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='Hchange-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
+    ypf.Map2D(H_change, xc, yc, r'Grounded Ice thickness Relative change', exp_labels, np.arange(0, 1.1, 0.1),
+              contours=hmask_bed[:, -1, :, :], contours_levels=[1, 4], cmap='cmo.tempo', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='Hchange-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
 if sZSRF == 1:
-    ypf.Map2D(z_srf, xc, yc, r'Ice surface elevation (km)', experiments, np.arange(0, 4.5+0.1, 0.1),
+    ypf.Map2D(z_srf, xc, yc, r'Ice surface elevation (km)', exp_labels, np.arange(0, 4.5+0.1, 0.1),
               contours=zmask_bed, contours_levels=[1, 4], cmap='jet', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='zsurf-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
 if sUXY == 1:
-    ypf.Map2D(uxy_s, xc, yc, r'Ice surface velocity (m/yr)', experiments, [0, 1e4],
+    ypf.Map2D(uxy_s, xc, yc, r'Ice surface velocity (m/yr)', exp_labels, [0, 1e4],
               contours=umask_bed, contours_levels=[1, 4], cmap='cmo.solar_r', log_scale=True, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='uxys-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
 if sGL == 1:
-    ypf.com_contMap2D(gl[:, 0, :, :] == 4.0, gl[:, 1, :, :] == 4.0, xc, yc, experiments, [], 'b', 'GL at initial stage', 'r', 'GL at final stage', linewidths=0.5, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='GL-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
+    ypf.com_contMap2D(gl[:, 0, :, :] == 4.0, gl[:, 1, :, :] == 4.0, xc, yc, exp_labels, [], 'b', 'GL at initial stage', 'r', 'GL at final stage', linewidths=0.5, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='GL-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
 if sgrnGL == 1:
-    ypf.com_contMap2D(grndgl[:, 0, :, :] == 4.0, grndgl[:, 1, :, :] == 4.0, xc, yc, experiments, [], 'b', 'GL at initial stage', 'r', 'GL at final stage', linewidths=0.5, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='grndGL-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
+    ypf.com_contMap2D(grndgl[:, 0, :, :] == 4.0, grndgl[:, 1, :, :] == 4.0, xc, yc, exp_labels, [], 'b', 'GL at initial stage', 'r', 'GL at final stage', linewidths=0.5, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='grndGL-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
 
 if sGIFS == 1:
     if szgif == 1:
         ygf.map2gif(xc, yc, z_srf_gif, r'Ice surface elevation (km)',
-                    experiments, time2D, np.arange(0, 4.5+0.1, 0.1), contours=zmask_bed_gif, con_levels=[1, 4], cmap='jet', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='zsurf-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
+                    exp_labels, time2D, np.arange(0, 4.5+0.1, 0.1), contours=zmask_bed_gif, con_levels=[1, 4], cmap='jet', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='zsurf-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
         # ygf.mkGif(xc, yc, z_srf_gif, r'Ice surface elevation (km)',
         #          experiments, times2plot, np.arange(0, 4.5+0.1, 0.1), contours=zmask_bed_gif, con_levels=[1, 4], cmap='jet', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='zsurf-'+gif_name)
     if shgif == 1:
         ygf.map2gif(xc, yc, H_grnd_gif, r'Grounded ice thickness (m)',
-                    experiments, time2D, np.arange(0, 4500+500, 500), contours=zmask_bed_gif, con_levels=[1, 4], cmap='cmo.ice_r', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='Hgrnd-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
+                    exp_labels, time2D, np.arange(0, 4500+500, 500), contours=zmask_bed_gif, con_levels=[1, 4], cmap='cmo.ice_r', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='Hgrnd-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
     if sugif == 1:
         ygf.map2gif(xc, yc, uxy_s_gif, r'Ice surface velocity (m/a)',
-                    experiments, time2D, [0, 1e4], contours=zmask_bed_gif, con_levels=[1, 4], cmap='cmo.solar_r', log_scale=True, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='uxys-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
+                    exp_labels, time2D, [0, 1e4], contours=zmask_bed_gif, con_levels=[1, 4], cmap='cmo.solar_r', log_scale=True, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='uxys-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
     if sGLBMBGIF == 1:
         bmb_min, bmb_max = ma.min(bmb_gif), ma.max(bmb_gif)
         maxval = max(np.abs(bmb_min), np.abs(bmb_max))
         step_bmb = 0.1*maxval
         bmblevels = np.arange(bmb_min, bmb_max+step_bmb, step_bmb)
         ygf.map2gif(xc, yc, bmb_gif, r'Total basal mass balance (m/a)',
-                    experiments, time2D, bmblevels, contours=[], con_levels=[0], cmap='cmo.phase', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='GLbmb-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
+                    exp_labels, time2D, bmblevels, contours=[], con_levels=[0], cmap='cmo.phase', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='GLbmb-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
     if sTAUDgif == 1:
         ygf.map2gif(xc, yc, taud_gif, r'Driving stress ($10^3$ Pa)',
-                    experiments, time2D, taud_lvls, [], [], cmap='gist_stern', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='taud-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
+                    exp_labels, time2D, taud_lvls, [], [], cmap='gist_stern', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='taud-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
     if sTAUBgif == 1:
         ygf.map2gif(xc, yc, taub_gif, r'Basal stress ($10^3$ Pa)',
-                    experiments, time2D, taub_lvls, [], [], cmap='gist_stern', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='taub-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
+                    exp_labels, time2D, taub_lvls, [], [], cmap='gist_stern', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='taub-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
     if sdifTAUgif == 1:
         ygf.map2gif(xc, yc, diftau_gif, r'Driving stress - Basal stress ($10^3$ Pa)',
-                    experiments, time2D, diftau_lvls, [], [], cmap='seismic', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='diftau-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
+                    exp_labels, time2D, diftau_lvls, [], [], cmap='seismic', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='diftau-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
     if sMB == 1:
         ygf.map2gif(xc, yc, MB_gif, r'Total mass balance (m/a)',
-                    experiments, time2D, mb_lvls, contours=[], con_levels=[0], cmap='cmo.thermal', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='MB-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
+                    exp_labels, time2D, mb_lvls, contours=[], con_levels=[0], cmap='cmo.thermal', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='MB-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
 
 if sGIFS3D == 1:
     if zgif3D == 1:
         ygf.map2gif(xc, yc, z_srf_gif3, r'Ice surface elevation (km)',
-                    experiments, time2D, np.arange(0, 4.5+0.1, 0.1), contours=zmask_bed_gif3, con_levels=[1, 4], cmap='jet', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='zsurf-'+gif3_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax, vis='3D')
+                    exp_labels, time2D, np.arange(0, 4.5+0.1, 0.1), contours=zmask_bed_gif3, con_levels=[1, 4], cmap='jet', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='zsurf-'+gif3_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax, vis='3D')
     if hgif3D == 1:
         ygf.map2gif(xc, yc, H_grnd_gif3, r'Grounded ice thickness (m)',
-                    experiments, time2D, np.arange(0, 4500+500, 500), contours=zmask_bed_gif3, con_levels=[1, 4], cmap='cmo.ice_r', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='Hgrnd-'+gif3_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax, vis='3D')
+                    exp_labels, time2D, np.arange(0, 4500+500, 500), contours=zmask_bed_gif3, con_levels=[1, 4], cmap='cmo.ice_r', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='Hgrnd-'+gif3_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax, vis='3D')
