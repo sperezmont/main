@@ -40,7 +40,9 @@ def LatexFormatter(string):
     bad_c = np.array(['_'])
     for i in range(len(string)):
         if string[i] == bad_c:
-            if string[i-1] != '\\':
+            if string[i-2] == '$':
+                continue
+            elif string[i-1] != '\\':
                 string = string.replace(
                     string[i], '\\'+str(bad_c[bad_c == string[i]][0]))
 
@@ -133,7 +135,7 @@ def comPlot1D(data1, data2, name1, units1, name2, units2, time_units, xticks, xt
 # 2D variables
 
 
-def Map2D(data, x, y, bar_name, exp_names, levels, contours, contours_levels, cmap='cmo.ice_r', log_scale=False, fig_size=[], fontsize=20, SHOW=False, base=10, ltresh=0.1, lscale=1, subs=[10], plotpath=[], file_name='map2D.png', set_ax='On'):
+def Map2D(data, x, y, bar_name, exp_names, levels, contours, contours_levels, cmap='cmo.ice_r', log_scale=False, fig_size=[], fontsize=20, SHOW=False, base=10, ltresh=0.1, lscale=1, subs=[10], plotpath=[], file_name='map2D.png', set_ax='On', cbar_orientation='horizontal', fig2D=[]):
     ''' Plot 2D data from Yelmo in n panels \n
         data.shape = (n, :, :) where n is the number of experiments
     '''
@@ -152,7 +154,11 @@ def Map2D(data, x, y, bar_name, exp_names, levels, contours, contours_levels, cm
         nrows = max(1, math.ceil(nexps/ncols))
     else:
         nrows, ncols = fig_size
-    fig = plt.figure(figsize=(7*ncols, 8*nrows))
+
+    if fig2D == []:
+        fig = plt.figure(figsize=(7*ncols, 8*nrows))
+    else:
+        fig = plt.figure(figsize=fig2D)
 
     for i in range(nexps):
         ax = fig.add_subplot(nrows, ncols, i+1)
@@ -194,6 +200,9 @@ def Map2D(data, x, y, bar_name, exp_names, levels, contours, contours_levels, cm
     else:
         pad = 0.1
 
+    if cbar_orientation == 'vertical':
+        pad = 0.2
+
     if set_ax == 'Off':
         pad = 0
 
@@ -204,10 +213,10 @@ def Map2D(data, x, y, bar_name, exp_names, levels, contours, contours_levels, cm
 
     if log_scale:
         cb = fig.colorbar(im, ax=axes, pad=pad, shrink=shrink,
-                          ticks=locator, orientation='horizontal')
+                          ticks=locator, orientation=cbar_orientation)
     else:
         cb = fig.colorbar(im, ax=axes, pad=pad, shrink=shrink,
-                          orientation='horizontal')
+                          orientation=cbar_orientation)
 
     cb.ax.tick_params(labelsize=fontsize)
     cb.set_label(label=r''+bar_name, size=fontsize)
@@ -283,6 +292,76 @@ def com_contMap2D(data1, data2, x, y, exp_names, levels, color1, label1, color2,
     if SHOW:
         plt.show()
 
+    if plotpath != []:
+        plt.savefig(plotpath + file_name)
+
+def ParPlot2D(data, axis_labels, bar_name, levels, contours, contours_levels, cmap='cmo.ice_r', log_scale=False, fontsize=20, base=10, ltresh=0.1, lscale=1, subs=[10], plotpath=[], file_name='map2D.png'):
+    ''' Plot 2D data from Yelmo in n panels \n
+        data.shape = (n, :, :) where n is the number of experiments
+    '''
+    nexps, leny, lenx = np.shape(data)
+    axes = []
+    ncols, nrows = len(axis_labels[0]), len(axis_labels[1])
+
+    if log_scale:
+        vmin, vmax = levels[0], levels[-1]
+        locator = matplotlib.ticker.SymmetricalLogLocator(
+            base=base, linthresh=ltresh, subs=subs)
+        locator.tick_values(vmin=vmin, vmax=vmax)
+        norm = matplotlib.colors.SymLogNorm(
+            base=base, linthresh=ltresh, linscale=lscale, vmin=vmin, vmax=vmax)
+    
+    fig = plt.figure(figsize=(10*ncols, 9*nrows))
+    
+    c, r = 0, 0
+    for i in range(nexps):
+        ax = fig.add_subplot(nrows, ncols, i+1)
+        ax.set_xticks(np.arange(-2500, 2500+1000, 1000))
+        ax.set_yticks(np.arange(-2500, 2500+1000, 1000))
+        ax.spines['right'].set_visible(False)
+        ax.spines['top'].set_visible(False)
+        ax.spines['bottom'].set_visible(False)
+        ax.spines['left'].set_visible(False)
+        
+        if log_scale:
+            im = ax.contourf(data[i, :, :], cmap=cmap, locator=locator, norm=norm)
+        else:
+            im = ax.contourf(data[i, :, :], levels, cmap=cmap)
+
+        if contours != []:
+            ax.contour(contours[i, :, :], contours_levels,colors='k', linewidths=2)
+
+        if c == 0:
+            ax.set_ylabel(axis_labels[1][r], fontsize=fontsize)
+        if r == nrows-1:
+            ax.set_xlabel(axis_labels[0][c], fontsize=fontsize)
+
+        if c == ncols-1:
+            r = r + 1
+
+        if c < ncols-1:
+            c = c + 1
+        else:
+            c = 0
+
+        axes.append(ax)
+
+    fig.tight_layout(pad=0.0)
+
+    if (nrows == 1) & (ncols == 1):
+        shrink = 1
+    else:
+        shrink = 0.6
+
+    if log_scale:
+        cb = fig.colorbar(im, ax=axes, pad=0.0, shrink=shrink,
+                          ticks=locator, orientation='vertical')
+    else:
+        cb = fig.colorbar(im, ax=axes, pad=0.0, shrink=shrink,
+                          orientation='vertical')
+
+    cb.ax.tick_params(labelsize=fontsize)
+    cb.set_label(label=r''+bar_name, size=fontsize)
     if plotpath != []:
         plt.savefig(plotpath + file_name)
 

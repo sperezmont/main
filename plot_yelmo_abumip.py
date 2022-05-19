@@ -21,9 +21,10 @@ locbasins = '/home/sergio/entra/ice_data/Antarctica/ANT-32KM/ANT-32KM_BASINS-nas
 
 # Switches (set to 1 what you want to pplot)
 sVAF = 1
-sHCHANGE = 1
+sHCHANGE = 0
+sParPlot = 0    # plots HCHANGE as a function of parameter values, it needs par_labels = [[xaxis], [yaxis]]
 sZSRF = 0
-sUXY = 1
+sUXY = 0
 sGL = 0
 sgrnGL = 0
 sGIFS, szgif, shgif, sugif, sGLBMBGIF, sTAUDgif, sTAUBgif, sdifTAUgif, sMB = 0, 0, 0, 0, 0, 0, 0, 0, 0
@@ -31,33 +32,37 @@ sGIFS3D, zgif3D, hgif3D = 0, 0, 0   # only one at a time
 
 # Experiment
 locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/bmb-sliding-fmb_yelmo-v1.75/' 
-experiments = ['abuc_pmp-m3q0.5f0.0', 'abuc_pmp-m3q0.5f1.0', 'abuc_pmp-m3q0.5f10.0',
-                'abuc_fcmp-m3q0.5f0.0', 'abuc_fcmp-m3q0.5f1.0', 'abuc_fcmp-m3q0.5f10.0',
-                'abuc_nmp-m3q0.5f0.0', 'abuc_nmp-m3q0.5f1.0', 'abuc_nmp-m3q0.5f10.0']
-exp_names = ['PMP, fc = 0.0', 'PMP, fc = 1.0', 'PMP, fc = 10.0', 'FCMP, fc = 0.0', 'FCMP, fc = 1.0', 'FCMP, fc = 10.0', 'NMP, fc = 0.0', 'NMP, fc = 1.0', 'NMP, fc = 10.0']  
+experiments = ['abuc_pmp-m3q0.5f10.0', 'abuc_pmp-m3q0.5f1.0', 'abuc_pmp-m3q0.5f0.0',
+                'abuc_fcmp-m3q0.5f10.0', 'abuc_fcmp-m3q0.5f1.0', 'abuc_fcmp-m3q0.5f0.0',
+                'abuc_nmp-m3q0.5f10.0', 'abuc_nmp-m3q0.5f1.0', 'abuc_nmp-m3q0.5f0.0']
+exp_names = ['PMP, $f_c$ = 10.0', 'PMP, $f_c$ = 1.0', 'PMP, $f_c$ = 0.0', 'FCMP, $f_c$ = 10.0', 'FCMP, $f_c$ = 1.0', 'FCMP, $f_c$ = 0.0', 'NMP, $f_c$ = 10.0', 'NMP, $f_c$ = 1.0', 'NMP, $f_c$ = 0.0']  
 control_run = None  # 'abuc_01'  # set to None if needed
 out_fldr = '/bmb-sliding-fmb_32KM/' # '/abuk_02-marine_32KM/' # '/abucip_01_32KM/'
-plot_name = 'yelmo_abuc_bmb-m3q0.5f-32KM.png' 
+plot_name = 'yelmo_abuc_bmb-m3q0.5f-32KM_2.png' 
 
 # PLOTTING
-shades1D = [1, 0, 0]    # abuc, abuk, abuc | from Sun et al., 2020
-color = 3*['k', 'b', 'r']
+shades1D = [1, 0, 0]    # abuc, abuk, abum | from Sun et al., 2020
+color = 3*['r', 'b', 'k']
 linestyles = 3*['solid'] + 3*['dashed'] + 3*['dotted']
 markers = 32*[None]
-linewidths = 3*[5, 3, 2]
+linewidths = [5, 3, 2, 3, 3, 2, 3, 3, 2]
 fig1D = (18, 5)
+fig2D = []
 fig_size = [3, 3]  # nrows, ncols
-fnt_size1D, fnt_size2D = 28, 30  # 28, 35  # fontsize
+fnt_size1D, fnt_size2D = 28, 80  # 28, 35  # fontsize
 
 xtickslab1D = [0, 100, 200, 300, 400, 500] # [0, 5000, 10000, 15000, 20000, 25000, 30000]
 units1D = 'yr'
-vaf_lim =[[54, 63],[-2, 1]]#[[55.5, 58], [-2, 1]] # # [[30, 63],[-4, 25]] # VAF fig limits
+vaf_lim =[[54, 63],[-2, 1]] # VAF fig limits
 
 set_ax = 'Off'  # Do you want to draw axis?
+cbar_orientation = 'horizontal'
 
 # Levels
 taud_lvls, taub_lvls, diftau_lvls = np.arange(0, 300 + 2, 2), np.arange(0, 300 + 2, 2), np.arange(-18, 18 + 1, 1)
 mb_lvls = np.arange(-400, 5+50, 50)
+
+par_labels = [['$f_c$ = 0.0', '$f_c$ = 1.0', '$f_c$ = 10.0'], ['PMP', 'FCMP', 'NMP']]
 
 # GIFs
 FPS = 1.5
@@ -120,8 +125,8 @@ if sVAF == 1:
     shades = np.empty((3, 2, 2, 51))
     VAFdata, dVAFdata = np.empty((n, lent)), np.empty((n, lent))
     if any(shades1D) != 0:
-        kindlist, varlist, abucip_exps = ['min', 'max'], [
-            'VAF', 'SLR'], ['ABUC', 'ABUK', 'abuc']
+        kindlist, varlist, abumip_exps = ['min', 'max'], [
+            'VAF', 'SLR'], ['ABUC', 'ABUK', 'ABUM']
         data_shades = nc.Dataset(
             locsources + '/ABUMIP_vaf-slr-shades.nc')
     for i in range(3):
@@ -129,10 +134,10 @@ if sVAF == 1:
             for j in range(len(varlist)):
                 for k in range(len(kindlist)):
                     shades[i, j, k, :] = data_shades.variables[kindlist[k] +
-                                                               varlist[j]+' '+abucip_exps[i]][:]
+                                                               varlist[j]+' '+abumip_exps[i]][:]
         else:
             shades[i, :, :, :] = None
-if sHCHANGE == 1:
+if (sHCHANGE == 1) or (sParPlot == 1):
     print('*** H_change ***')
     H_change, Hreg_change, Hbas_change = ma.empty(
         (n, lenx, leny)), np.empty((n, 3)), np.empty((n, 2, 19))
@@ -197,7 +202,7 @@ for i in range(n):
         dvaf = yf.SLR(datan*1e6)
         VAFdata[i, :], dVAFdata[i, :] = vaf, dvaf
 
-    if sHCHANGE == 1:
+    if  (sHCHANGE == 1) or (sParPlot == 1):
         if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
             H_change[i, :, :], hmask_bed[i, :, :] = np.NaN, np.NaN
             continue
@@ -406,9 +411,12 @@ for i in range(n):
 if sVAF == 1:
     ypf.comPlot1D(VAFdata, dVAFdata, r'VAF', r'm SLE', r'SLR', r'm SLE', units1D, xticks1D, xtickslab1D, vaf_lim, locplot+out_fldr, shades, text=False,
                   labels=exp_labels, color=color, linestyles=linestyles, markers=markers, linewidths=linewidths, file_name='vaf-'+plot_name, fontsize=fnt_size1D, fig1D=fig1D)
-if sHCHANGE == 1:
-    ypf.Map2D(H_change, xc, yc, r'Grounded Ice thickness Relative change', exp_labels, np.arange(0, 1.1, 0.1),
-              contours=hmask_bed[:, -1, :, :], contours_levels=[1, 4], cmap='cmo.tempo', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='Hchange-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
+if  (sHCHANGE == 1) or (sParPlot == 1):
+    if sParPlot == 1:
+        ypf.ParPlot2D(H_change, par_labels, r'Grounded Ice thickness relative change', np.arange(0, 1.1, 0.1), contours=hmask_bed[:, -1, :, :], contours_levels=[1, 4], cmap='cmo.tempo', plotpath=locplot+out_fldr, file_name='ParPlot-'+plot_name, fontsize=fnt_size2D)
+    else:
+        ypf.Map2D(H_change, xc, yc, r'Grounded Ice thickness Relative change', exp_labels, np.arange(0, 1.1, 0.1),
+                contours=hmask_bed[:, -1, :, :], contours_levels=[1, 4], cmap='cmo.tempo', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='Hchange-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax, cbar_orientation=cbar_orientation, fig2D=fig2D)
 if sZSRF == 1:
     ypf.Map2D(z_srf, xc, yc, r'Ice surface elevation (km)', exp_labels, np.arange(0, 4.5+0.1, 0.1),
               contours=zmask_bed, contours_levels=[1, 4], cmap='jet', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='zsurf-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)

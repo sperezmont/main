@@ -25,9 +25,9 @@ locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/bmb-sliding-
 plotpath = '/home/sergio/entra/proyects/ABUMIP/proyects/abumip_yelmo-v1.75/bmb-sliding-fmb_32KM/' 
 
 # size must be len(xaxis_names) * len(yaxis_names), put them as you want to see them in the plot (as an array)
-exp_names = [['abuc_pmp-m3q0.5f0.0', 'abuc_pmp-m3q0.5f1.0', 'abuc_pmp-m3q0.5f10.0'],
-                ['abuc_fcmp-m3q0.5f0.0', 'abuc_fcmp-m3q0.5f1.0', 'abuc_fcmp-m3q0.5f10.0'],
-                ['abuc_nmp-m3q0.5f0.0', 'abuc_nmp-m3q0.5f1.0', 'abuc_nmp-m3q0.5f10.0']]
+exp_names = [['abum_pmp-m3q0.5f0.0', 'abum_pmp-m3q0.5f1.0', 'abum_pmp-m3q0.5f10.0'],
+                ['abum_fcmp-m3q0.5f0.0', 'abum_fcmp-m3q0.5f1.0', 'abum_fcmp-m3q0.5f10.0'],
+                ['abum_nmp-m3q0.5f0.0', 'abum_nmp-m3q0.5f1.0', 'abum_nmp-m3q0.5f10.0']]
 
 #exp_names = [['abum-marine_eps0.5_dtt5.0', 'abum-marine_eps1.0_dtt5.0', 'abum-marine_eps2.0_dtt5.0', 'abum-marine_eps3.0_dtt5.0'],
 #              ['abum-marine_eps0.5_dtt4.0', 'abum-marine_eps1.0_dtt4.0', 'abum-marine_eps2.0_dtt4.0','abum-marine_eps3.0_dtt4.0'],
@@ -37,17 +37,17 @@ exp_names = [['abuc_pmp-m3q0.5f0.0', 'abuc_pmp-m3q0.5f1.0', 'abuc_pmp-m3q0.5f10.
 #              ['abum-marine_eps0.5_dtt0.5', 'abum-marine_eps1.0_dtt0.5', 'abum-marine_eps2.0_dtt0.5', 'abum-marine_eps3.0_dtt0.5']] 
 
 var2load = 'V_sle'
-var2plot = 'V' # 'SLR' 'V'
+var2plot = 'SLR' # 'SLR' 'V'
 varlims = []
-plot_name = 'heatmap-{}_bmb-fmb-abuc_32KM.png'.format(var2plot)
+plot_name = 'heatmap-{}_bmb-fmb-abum_32KM.png'.format(var2plot)
 var2plot_units = 'm SLE'
 time_index = -1
 yelmo_fname = 'yelmo1D.nc' # default
 
 # y1
-yaxis_label = 'Basal melting method at the GL'
+yaxis_label = ''#'Basal melting method at the GL'
 yaxis_loc = [0.5, 1.5, 2.5]
-yaxis_names = ['nmp', 'fcmp', 'pmp']    # as a string
+yaxis_names = ['NMP', 'FCMP', 'PMP']    # as a string
 ylimits_cell = np.arange(1, 4, 1)
 
 # y2
@@ -58,16 +58,16 @@ y2axis_names = ['10.0', '1.0', '0.0']    # as a string
 y2limits_cell = np.arange(0.5, 4.5, 1)
 
 # x1
-xaxis_label = 'Frontal melting scale'
+xaxis_label = ''#'Frontal melting scale'
 xaxis_loc = [0.5, 1.5, 2.5]
-xaxis_names =  ['0.0', '1.0', '10.0']   # as a string
+xaxis_names =  ['$f_c$ = 0.0', '$f_c$ = 1.0', '$f_c$ = 10.0']   # as a string
 xlimits_cell = np.arange(1, 4, 1)
 
 # x2
 x2axis_on = False
-x2axis_label = 'Frontal melting scale' #(Regularized Coulomb = C, Power law = P)'
+x2axis_label = ''#'Frontal melting scale' #(Regularized Coulomb = C, Power law = P)'
 x2axis_loc = [1.5, 4.5, 7.5]
-x2axis_names = ['10.0', '1.0', '0.0']
+x2axis_names = ['$f_c$ = 10.0', '$f_c$ = 1.0', '$f_c$ = 0.0']
 x2limits_cell = []
 
 fontsize = 25
@@ -80,6 +80,7 @@ figsize = (7, 7)
 pad=0.009 
 shrink=0.8
 text = True
+meanV = True
 
 
 # Load Variables
@@ -113,7 +114,7 @@ for i in range(0, int(len(exp_names[0][:]))):
 
 mean = np.nanmean(data_array)
 std = np.std(data_array)
-print(mean, std)
+
 # Plot
 if LatexON:
     # Activating LaTeX font
@@ -137,7 +138,8 @@ else:
 
 fig, ax = plt.subplots(figsize=figsize)
 
-ax.set_title('mean = '+str(round(mean,4))+', std = '+str(round(std,4)), fontsize=fontsize)
+if meanV:
+    ax.set_title(var2plot+'$_{mean}$ = '+str(round(mean,2)) + '$\pm$' +str(round(std,2))+' '+var2plot_units, fontsize=fontsize, loc='left')
 
 im = plt.imshow(data_array, cmap=colormap, vmin=vmin, vmax=vmax, origin='upper',
                  extent=[0, len(xaxis_names), 0, len(yaxis_names)])
