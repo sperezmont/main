@@ -44,7 +44,7 @@ def LatexFormatter(string):
     return string
 
 
-def Map2DI(data, time, x, y, bar_name, exp_names, levels, contours, con_levels, cmap='cmo.ice_r', log_scale=False, fig_size=[], fontsize=20, SHOW=False, base=10, ltresh=0.1, lscale=1, subs=[10], plotpath=[], file_name='map2D.png', set_ax='On', vis='2D'):
+def Map2DI(data, time, x, y, bar_name, exp_names, levels, contours, con_levels, cmap='cmo.ice_r', colors=None, log_scale=False, fig_size=[], fontsize=20, SHOW=False, base=10, ltresh=0.1, lscale=1, subs=[10], gamma=0, plotpath=[], file_name='map2D.png', set_ax='On', vis='2D'):
     ''' Plot 2D data from Yelmo in n panels '''
     ''' data.shape = (n, :, :) where n is the number of experiments '''
     nexps, lenx, leny = np.shape(data)
@@ -92,6 +92,8 @@ def Map2DI(data, time, x, y, bar_name, exp_names, levels, contours, con_levels, 
             if log_scale:
                 im = ax.contourf(
                     x, y, data[i, :, :], cmap=cmap, locator=locator, norm=norm)
+            if log_scale == None:
+                im = ax.contourf(x, y, data[i, :, :], levels, colors=colors)
             else:
                 im = ax.contourf(x, y, data[i, :, :], levels, cmap=cmap)
 
@@ -155,7 +157,7 @@ def Map2DI(data, time, x, y, bar_name, exp_names, levels, contours, con_levels, 
     return image
 
 
-def map2gif(x, y, data, bar_name, exp_names, times, levels, contours=[], con_levels=[], cmap='cmo.ice_r', log_scale=False, fig_size=[], plotpath=[], file_name='map2gif.gif', FPS=0.6, fontsize=20, base=10, ltresh=0.1, lscale=1, subs=[10], set_ax='On', vis='2D'):
+def map2gif(x, y, data, bar_name, exp_names, times, levels, contours=[], con_levels=[], cmap='cmo.ice_r', colors=None, log_scale=False, fig_size=[], plotpath=[], file_name='map2gif.gif', FPS=0.6, fontsize=20, base=10, ltresh=0.1, lscale=1, subs=[10], gamma=0, set_ax='On', vis='2D'):
     ''' Generate a gif from nexps experiments and one variable '''
 
     if plotpath == []:
@@ -164,9 +166,9 @@ def map2gif(x, y, data, bar_name, exp_names, times, levels, contours=[], con_lev
         outname = plotpath + file_name
 
     if contours != []:
-        imageio.mimsave(outname, [Map2DI(data[:, i, :, :], times[i], x, y, bar_name, exp_names, levels, contours[:, i, :, :], con_levels, cmap, log_scale, fig_size, fontsize, base=base, ltresh=ltresh, lscale=lscale, subs=subs, set_ax=set_ax, vis=vis)
+        imageio.mimsave(outname, [Map2DI(data[:, i, :, :], times[i], x, y, bar_name, exp_names, levels, contours[:, i, :, :], con_levels, cmap, colors, log_scale, fig_size, fontsize, base=base, ltresh=ltresh, lscale=lscale, subs=subs, gamma=gamma, set_ax=set_ax, vis=vis)
                               for i in range(len(times))], fps=FPS)
     else:
-        imageio.mimsave(outname, [Map2DI(data[:, i, :, :], times[i], x, y, bar_name, exp_names, levels, [], con_levels, cmap, log_scale, fig_size, fontsize, base=base, ltresh=ltresh, lscale=lscale, subs=subs, set_ax=set_ax, vis=vis)
+        imageio.mimsave(outname, [Map2DI(data[:, i, :, :], times[i], x, y, bar_name, exp_names, levels, [], con_levels, cmap, colors, log_scale, fig_size, fontsize, base=base, ltresh=ltresh, lscale=lscale, subs=subs, gamma=gamma, set_ax=set_ax, vis=vis)
                               for i in range(len(times))], fps=FPS)
     plt.close()

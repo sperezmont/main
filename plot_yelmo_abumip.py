@@ -20,40 +20,39 @@ locsources = '/home/sergio/entra/ice_data/sources/ABUMIP_shades/'
 locbasins = '/home/sergio/entra/ice_data/Antarctica/ANT-32KM/ANT-32KM_BASINS-nasa.nc'
 
 # Switches (set to 1 what you want to pplot)
-sVAF = 1
+sVAF = 0
 sHCHANGE = 0
-sParPlot = 0    # plots HCHANGE as a function of parameter values, it needs par_labels = [[xaxis], [yaxis]]
+sParPlot = 0   # plots HCHANGE as a function of parameter values, it needs par_labels = [[xaxis], [yaxis]]
 sZSRF = 0
 sUXY = 0
 sGL = 0
 sgrnGL = 0
-sGIFS, szgif, shgif, sugif, sGLBMBGIF, sTAUDgif, sTAUBgif, sdifTAUgif, sMB = 0, 0, 0, 0, 0, 0, 0, 0, 0
+sRMSEwrpd = 0 # Plots the differences and RMSE wrt pd
+sGIFS, szgif, shgif, sugif, sdugif, sGLBMBGIF, sTAUDgif, sTAUBgif, sdifTAUgif, sMB = 1, 0, 0, 0, 1, 0, 0, 0, 0, 0
 sGIFS3D, zgif3D, hgif3D = 0, 0, 0   # only one at a time
 
 # Experiment
 locdata = '/home/sergio/entra/yelmo_vers/v1.75/yelmox/output/ismip6/bmb-sliding-fmb_yelmo-v1.75/' 
-experiments = ['abuc_pmp-m3q0.5f10.0', 'abuc_pmp-m3q0.5f1.0', 'abuc_pmp-m3q0.5f0.0',
-                'abuc_fcmp-m3q0.5f10.0', 'abuc_fcmp-m3q0.5f1.0', 'abuc_fcmp-m3q0.5f0.0',
-                'abuc_nmp-m3q0.5f10.0', 'abuc_nmp-m3q0.5f1.0', 'abuc_nmp-m3q0.5f0.0']
-exp_names = ['PMP, $f_c$ = 10.0', 'PMP, $f_c$ = 1.0', 'PMP, $f_c$ = 0.0', 'FCMP, $f_c$ = 10.0', 'FCMP, $f_c$ = 1.0', 'FCMP, $f_c$ = 0.0', 'NMP, $f_c$ = 10.0', 'NMP, $f_c$ = 1.0', 'NMP, $f_c$ = 0.0']  
+experiments = ['abum_pmp-m3q0.5f0.0', 'abum_pmp-m3q0.5f1.0', 'abum_pmp-m3q0.5f10.0','abum_fcmp-m3q0.5f0.0', 'abum_fcmp-m3q0.5f1.0', 'abum_fcmp-m3q0.5f10.0','abum_nmp-m3q0.5f0.0', 'abum_nmp-m3q0.5f1.0', 'abum_nmp-m3q0.5f10.0']
+exp_names = 3*['PMP'] + 3*['FCMP'] + 3*['NMP']
 control_run = None  # 'abuc_01'  # set to None if needed
 out_fldr = '/bmb-sliding-fmb_32KM/' # '/abuk_02-marine_32KM/' # '/abucip_01_32KM/'
-plot_name = 'yelmo_abuc_bmb-m3q0.5f-32KM_2.png' 
+plot_name = 'yelmo_abum_bmbf0-1-10-32KM.png' 
 
 # PLOTTING
-shades1D = [1, 0, 0]    # abuc, abuk, abum | from Sun et al., 2020
-color = 3*['r', 'b', 'k']
-linestyles = 3*['solid'] + 3*['dashed'] + 3*['dotted']
+shades1D = [0, 0, 1]    # abuc, abuk, abum | from Sun et al., 2020
+color = 3*['k']+3*['b']+3*['r']#3*['r', 'b', 'k']
+linestyles = 3*['solid', 'dashed', 'dotted']#3*['solid'] + 3*['dashed'] + 3*['dotted']
 markers = 32*[None]
-linewidths = [5, 3, 2, 3, 3, 2, 3, 3, 2]
+linewidths = 3*[3,3,3]#[5, 3, 2, 3, 3, 2, 3, 3, 2]
 fig1D = (18, 5)
 fig2D = []
 fig_size = [3, 3]  # nrows, ncols
-fnt_size1D, fnt_size2D = 28, 80  # 28, 35  # fontsize
+fnt_size1D, fnt_size2D = 28, 35  # 28, 35  # fontsize
 
 xtickslab1D = [0, 100, 200, 300, 400, 500] # [0, 5000, 10000, 15000, 20000, 25000, 30000]
 units1D = 'yr'
-vaf_lim =[[54, 63],[-2, 1]] # VAF fig limits
+vaf_lim =[[38, 58],[-1, 35]] # VAF fig limits
 
 set_ax = 'Off'  # Do you want to draw axis?
 cbar_orientation = 'horizontal'
@@ -142,6 +141,7 @@ if (sHCHANGE == 1) or (sParPlot == 1):
     H_change, Hreg_change, Hbas_change = ma.empty(
         (n, lenx, leny)), np.empty((n, 3)), np.empty((n, 2, 19))
     hmask_bed = ma.empty((n, 2, lenx, leny))
+    dduxy_s = ma.empty((n, lenx, leny))
 if sZSRF == 1:
     print('*** z_srf ***')
     z_srf = ma.empty((n, lenx, leny))
@@ -156,6 +156,12 @@ if sGL == 1:
 if sgrnGL == 1:
     print('*** Initial and final grounded cells GL ***')
     grndgl = ma.empty((n, 2, lenx, leny))
+if sRMSEwrpd == 1:
+    print('*** RMSE wrt PD ***')
+    Hrmse = ma.empty((n, lenx, leny))
+    Urmse = ma.empty((n, lenx, leny))
+    rmse_mask = ma.empty((n, lenx, leny))
+    Hrmse_val, Urmse_val = [], []
 
 if sGIFS == 1:
     print('*** making gifs ... (time consuming) ***')
@@ -166,6 +172,8 @@ if sGIFS == 1:
         H_grnd_gif = ma.empty((n, len(time2D), lenx, leny))
     if sugif == 1:
         uxy_s_gif = ma.empty((n, len(time2D), lenx, leny))
+    if sdugif == 1:
+        duxy_s_gif = ma.empty((n, len(time2D), lenx, leny))
     if sGLBMBGIF == 1:
         gl_gif = ma.empty((n, len(time2D), lenx, leny))
         bmb_gif = ma.empty((n, len(time2D), lenx, leny))
@@ -201,6 +209,7 @@ for i in range(n):
         vaf = yf.SLE(datan*1e6)
         dvaf = yf.SLR(datan*1e6)
         VAFdata[i, :], dVAFdata[i, :] = vaf, dvaf
+        print(vaf[-1])
 
     if  (sHCHANGE == 1) or (sParPlot == 1):
         if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
@@ -284,6 +293,23 @@ for i in range(n):
         grndgli, xc, yc = yf.LoadYelmo3D(experiments[i], 'mask_bed', locdata, time=[1, -1])
         grndgl[i, :, :, :] = ma.masked_where(grnd <= 0, grndgli)
 
+    if sRMSEwrpd == 1:
+        if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
+            Hrmse[i, :, :] = np.NaN
+            Urmse[i, :, :] = np.NaN
+            continue
+        Hrmse[i, :, :], xc, yc = yf.LoadYelmo3D(experiments[i], 'H_ice_pd_err', locdata, time=-1)
+        Hrmse_vali = yf.Load1DYelmo2D(experiments[i], 'rmse_H', locdata, time=None)
+        Urmse[i, :, :], xc, yc = yf.LoadYelmo3D(experiments[i], 'uxy_s_pd_err', locdata, time=-1)
+        Urmse_vali = yf.Load1DYelmo2D(experiments[i], 'rmse_uxy', locdata, time=None)
+        maskbed, xc, yc = yf.LoadYelmo3D(experiments[i], 'mask_bed', locdata, time=0)
+
+        Hrmse[i, :, :] = ma.masked_where((maskbed == 0)&(Hrmse[i, :, :] == 0), Hrmse[i, :, :])
+        Urmse[i, :, :] = ma.masked_where((maskbed == 0)&(Urmse[i, :, :] == 0), Urmse[i, :, :])
+        rmse_mask[i, :, :] = maskbed
+        Hrmse_val.append(exp_names[i]+', RMSE = '+str(round(Hrmse_vali[-1],2))+' m')
+        Urmse_val.append(exp_names[i]+', RMSE = '+str(round(Urmse_vali[-1],2))+' m/yr')
+
     if sGIFS == 1:
         if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
             zmask_bed_gif[i, :, :, :] = np.NaN
@@ -332,6 +358,14 @@ for i in range(n):
 
             u_gif = ma.masked_where(maskbedgif == 0, u_gif)
             uxy_s_gif[i, :, :, :] = u_gif
+        if sdugif == 1:
+            if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
+                duxy_s_gif[i, :, :, :] = np.NaN
+                continue
+            u_gif, xc, yc = yf.LoadYelmo3D(experiments[i], 'uxy_s', locdata)
+
+            u_gif = ma.masked_where(maskbedgif == 0, u_gif)
+            duxy_s_gif[i, :, :, :] = u_gif - u_gif[0, :, :]
         if sGLBMBGIF == 1:
             if os.path.exists(locdata+experiments[i]+'/yelmo_killed.nc'):
                 gl_gif[i, :, :, :], bmb_gif[i, :, :, :] = np.NaN, np.NaN
@@ -427,6 +461,11 @@ if sGL == 1:
     ypf.com_contMap2D(gl[:, 0, :, :] == 4.0, gl[:, 1, :, :] == 4.0, xc, yc, exp_labels, [], 'b', 'GL at initial stage', 'r', 'GL at final stage', linewidths=0.5, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='GL-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
 if sgrnGL == 1:
     ypf.com_contMap2D(grndgl[:, 0, :, :] == 4.0, grndgl[:, 1, :, :] == 4.0, xc, yc, exp_labels, [], 'b', 'GL at initial stage', 'r', 'GL at final stage', linewidths=0.5, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='grndGL-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax)
+if sRMSEwrpd == 1:
+    ypf.Map2D(Hrmse, xc, yc, r'Ice thickness error (m)', Hrmse_val, np.arange(-1900, 1900+10, 10),
+                contours=rmse_mask, contours_levels=[1, 4], cmap='cmo.balance', fig_size=fig_size, plotpath=locplot+out_fldr, file_name='Hrmse-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax, cbar_orientation=cbar_orientation, fig2D=fig2D)
+    ypf.Map2D(Urmse, xc, yc, r'Ice surface velocity error (m/yr)', Urmse_val, np.arange(-6000, 6000+10, 10),
+                contours=rmse_mask, contours_levels=[1, 4], cmap='cmo.balance',log_scale=True, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='Urmse-'+plot_name, fontsize=fnt_size2D, set_ax=set_ax, cbar_orientation=cbar_orientation, fig2D=fig2D)
 
 if sGIFS == 1:
     if szgif == 1:
@@ -440,6 +479,11 @@ if sGIFS == 1:
     if sugif == 1:
         ygf.map2gif(xc, yc, uxy_s_gif, r'Ice surface velocity (m/a)',
                     exp_labels, time2D, [0, 1e4], contours=zmask_bed_gif, con_levels=[1, 4], cmap='cmo.solar_r', log_scale=True, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='uxys-'+gif_name, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
+    if sdugif == 1:
+        colorsduxy = ['#3b4cc0', '#4b65d5', '#5d7ce6', '#7092f3', '#83a6fb', '#97b8ff', '#aac7fd', '#bdd2f7', '#ced9ec', '#dfd4d2', '#ead4c8', '#f3c8b2', '#f7b89c', '#f6a586', '#f18e70', '#e7755b', '#da5948', '#c83936', '#b40426']
+        ypf.ParPlot2D(duxy_s_gif[:,-1,:,:], par_labels, r'Ice surface velocity change (m/a)',[-2500,-1000,-500,-100,-50,-30,-20,-10,-0.2,0,0.2,10,20,30,50,100,500,1000,2500], contours=zmask_bed_gif[:,-1,:,:], contours_levels=[1, 4], cmap=colorsduxy, plotpath=locplot+out_fldr, file_name='duxys-'+plot_name, fontsize=fnt_size2D)
+        ygf.map2gif(xc, yc, duxy_s_gif, r'Ice surface velocity change (m/a)',
+                    exp_labels, time2D, [-2500,-1000,-500,-100,-50,-30,-20,-10,-0.2,0,0.2,10,20,30,50,100,500,1000,2500], contours=zmask_bed_gif, con_levels=[1, 4], colors=colorsduxy, log_scale=None, fig_size=fig_size, plotpath=locplot+out_fldr, file_name='duxys-'+gif_name, gamma=0, FPS=FPS, fontsize=fnt_size2D, set_ax=set_ax)
     if sGLBMBGIF == 1:
         bmb_min, bmb_max = ma.min(bmb_gif), ma.max(bmb_gif)
         maxval = max(np.abs(bmb_min), np.abs(bmb_max))

@@ -323,10 +323,16 @@ def ParPlot2D(data, axis_labels, bar_name, levels, contours, contours_levels, cm
         ax.spines['bottom'].set_visible(False)
         ax.spines['left'].set_visible(False)
         
-        if log_scale:
-            im = ax.contourf(data[i, :, :], cmap=cmap, locator=locator, norm=norm)
-        else:
-            im = ax.contourf(data[i, :, :], levels, cmap=cmap)
+        try:
+            if log_scale:
+                im = ax.contourf(data[i, :, :], cmap=cmap, locator=locator, norm=norm)
+            else:
+                im = ax.contourf(data[i, :, :], levels, cmap=cmap)
+        except:
+            if log_scale:
+                im = ax.contourf(data[i, :, :], colors=cmap, locator=locator, norm=norm)
+            else:
+                im = ax.contourf(data[i, :, :], levels, colors=cmap)
 
         if contours != []:
             ax.contour(contours[i, :, :], contours_levels,colors='k', linewidths=2)
