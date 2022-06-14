@@ -28,7 +28,7 @@ sUXY = 0
 sGL = 0
 sgrnGL = 0
 sRMSEwrpd = 0 # Plots the differences and RMSE wrt pd
-sGIFS, szgif, shgif, sugif, sdugif, sGLBMBGIF, sTAUDgif, sTAUBgif, sdifTAUgif, sMB = 1, 0, 0, 0, 1, 0, 0, 0, 0, 0
+sGIFS, szgif, shgif, sugif, sdugif, sGLBMBGIF, sTAUDgif, sTAUBgif, sdifTAUgif, sMB = 1, 0, 1, 0, 0, 0, 0, 0, 0, 0
 sGIFS3D, zgif3D, hgif3D = 0, 0, 0   # only one at a time
 
 # Experiment

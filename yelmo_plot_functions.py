@@ -118,15 +118,15 @@ def comPlot1D(data1, data2, name1, units1, name2, units2, time_units, xticks, xt
         ax[i].set_xlabel(r'Time (' + time_units + ')', fontsize=fontsize)
         ax[i].set_ylabel(r''+names[i] + ' (' + units[i] + ')',
                          fontsize=fontsize)
-        ax[i].tick_params(axis='x', labelsize=0.8*fontsize)
-        ax[i].tick_params(axis='y', labelsize=0.8*fontsize)
+        ax[i].tick_params(axis='x', labelsize=1*fontsize)
+        ax[i].tick_params(axis='y', labelsize=1*fontsize)
     
     if (nexps > 3)&(nexps <= 15):
-        ax2.legend(bbox_to_anchor=(1,0.5), fontsize=0.8*fontsize, loc='center left')
+        ax2.legend(bbox_to_anchor=(1,0.5), fontsize=0.6*fontsize, loc='center left')
     elif nexps <= 3:
-        ax2.legend(fontsize=0.8*fontsize)
+        ax2.legend(fontsize=0.6*fontsize)
     else:
-        ax2.legend(fontsize=0.8*fontsize)
+        ax2.legend(fontsize=0.6*fontsize)
         ax2.get_legend().remove()
     
     plt.tight_layout()
