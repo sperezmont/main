@@ -23,12 +23,12 @@ locbasins = '/home/sergio/entra/ice_data/Antarctica/ANT-32KM/ANT-32KM_BASINS-nas
 sVAF = 0
 sHCHANGE = 0
 sParPlot = 0   # plots HCHANGE as a function of parameter values, it needs par_labels = [[xaxis], [yaxis]]
-sZSRF = 0
+sZSRF = 1
 sUXY = 0
 sGL = 0
 sgrnGL = 0
 sRMSEwrpd = 0 # Plots the differences and RMSE wrt pd
-sGIFS, szgif, shgif, sugif, sdugif, sGLBMBGIF, sTAUDgif, sTAUBgif, sdifTAUgif, sMB = 1, 0, 1, 0, 0, 0, 0, 0, 0, 0
+sGIFS, szgif, shgif, sugif, sdugif, sGLBMBGIF, sTAUDgif, sTAUBgif, sdifTAUgif, sMB = 0, 0, 1, 0, 0, 0, 0, 0, 0, 0
 sGIFS3D, zgif3D, hgif3D = 0, 0, 0   # only one at a time
 
 # Experiment
@@ -37,12 +37,12 @@ experiments = ['abum_pmp-m3q0.5f0.0', 'abum_pmp-m3q0.5f1.0', 'abum_pmp-m3q0.5f10
 exp_names = 3*['PMP'] + 3*['FCMP'] + 3*['NMP']
 control_run = None  # 'abuc_01'  # set to None if needed
 out_fldr = '/bmb-sliding-fmb_32KM/' # '/abuk_02-marine_32KM/' # '/abucip_01_32KM/'
-plot_name = 'yelmo_abum_bmbf0-1-10-32KM.png' 
+plot_name = 'yelmo_abumip-32KM.png' 
 
 # PLOTTING
 shades1D = [0, 0, 1]    # abuc, abuk, abum | from Sun et al., 2020
 color = 3*['k']+3*['b']+3*['r']#3*['r', 'b', 'k']
-linestyles = 3*['solid', 'dashed', 'dotted']#3*['solid'] + 3*['dashed'] + 3*['dotted']
+linestyles = 9*['']#3*['solid', 'dashed', 'dotted']#3*['solid'] + 3*['dashed'] + 3*['dotted']
 markers = 32*[None]
 linewidths = 3*[3,3,3]#[5, 3, 2, 3, 3, 2, 3, 3, 2]
 fig1D = (18, 5)
@@ -52,7 +52,7 @@ fnt_size1D, fnt_size2D = 28, 35  # 28, 35  # fontsize
 
 xtickslab1D = [0, 100, 200, 300, 400, 500] # [0, 5000, 10000, 15000, 20000, 25000, 30000]
 units1D = 'yr'
-vaf_lim =[[38, 58],[-1, 35]] # VAF fig limits
+vaf_lim =[[38, 58],[-1, 15]] # VAF fig limits
 
 set_ax = 'Off'  # Do you want to draw axis?
 cbar_orientation = 'horizontal'
